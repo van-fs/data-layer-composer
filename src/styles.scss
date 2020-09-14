@@ -2,3 +2,15 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.full-width {
+  width: 100%;
+}
+
+mat-checkbox {
+  margin-right: 12px;
+}
+
+mat-list-item {
+  margin-top: 18px;
+}
