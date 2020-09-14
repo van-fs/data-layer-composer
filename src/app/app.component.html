@@ -1,3 +1,83 @@
-<mat-toolbar>
+<mat-toolbar color="primary">
+  <button mat-button (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
   <span>Data Layer Composer</span>
+  <span class="spacer"></span>
+  <button mat-stroked-button [matMenuTriggerFor]="models" matTooltip="Load a data layer sample">
+    <mat-icon>file_copy</mat-icon>
+  </button>
+  <button mat-stroked-button matTooltip="Add a data layer observer rule" (click)="addRule()">
+    <mat-icon>add_circle</mat-icon>
+  </button>
+  <!--
+  <button mat-stroked-button matTooltip="Run data layer observer" (click)="run()">
+    <mat-icon>play_circle_filled</mat-icon>
+  </button>
+  -->
+  <button mat-stroked-button matTooltip="Clear output and logs" (click)="clear()">
+    <mat-icon>restore_page</mat-icon>
+  </button>
+  <!--
+  <button mat-stroked-button matTooltip="Save data layer and rules to local storage" (click)="save()">
+    <mat-icon>save</mat-icon>
+  </button>
+   -->
 </mat-toolbar>
+<mat-drawer-container class="container" [hasBackdrop]="false" autosize>
+  <mat-drawer #drawer mode="over">
+    <mat-list>
+      <div mat-subheader>Data Layer Observer Settings</div>
+      <mat-list-item>
+        <mat-checkbox [(ngModel)]="observerService.config.previewMode" [disabled]="true">_dlo_previewMode</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox [(ngModel)]="observerService.config.readOnLoad" [disabled]="true">_dlo_readOnLoad</mat-checkbox>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-checkbox [(ngModel)]="observerService.config.validateRules" [disabled]="true">_dlo_validateRules
+        </mat-checkbox>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer>
+
+  <div class="sidenav" fxLayout="row" fxLayoutAlign="start stretch">
+    <mat-tab-group #datalayerTabs fxFlex="40">
+      <mat-tab label="Data Layer">
+        <mat-card class="output-card">
+          <pre #input id="input" class="datalayer-input" contenteditable="true">{{ datalayer }}</pre>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Observer Output">
+        <mat-card *ngFor="let data of output">
+          <pre>{{ data }}</pre>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Observer Log">
+        <mat-card *ngFor="let event of logs">
+          <mat-icon *ngIf="event.level === 0" color="warn">error</mat-icon>
+          <mat-icon *ngIf="event.level === 1" color="accent">warning</mat-icon>
+          {{ event.message }}
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+    <mat-tab-group fxFlex="60">
+      <mat-tab label="Rule Set">
+        <mat-accordion multi>
+          <app-rule *ngFor="let rule of rules" [rule]="rule"></app-rule>
+        </mat-accordion>
+      </mat-tab>
+      <mat-tab label="JSON">
+        <mat-card>
+          <pre contenteditable="true">{{ printRules() }}</pre>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</mat-drawer-container>
+
+<mat-menu #models="matMenu">
+  <button mat-menu-item (click)="load('ceddl')">
+    <span>CEDDL</span>
+  </button>
+</mat-menu>

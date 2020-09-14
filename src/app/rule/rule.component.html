@@ -1,0 +1,64 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ rule.id }}
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div fxLayout="column" fxLayoutAlign="start stretch">
+    <mat-list>
+      <mat-list-item>
+        <mat-form-field class="full-width">
+          <mat-label>id</mat-label>
+          <input matInput [(ngModel)]="rule.id">
+        </mat-form-field>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-form-field class="full-width">
+          <mat-label>description</mat-label>
+          <input matInput [(ngModel)]="rule.description">
+        </mat-form-field>
+      </mat-list-item>
+      <mat-list-item>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-checkbox matInput [(ngModel)]="rule.readOnLoad">readOnLoad</mat-checkbox>
+          <mat-checkbox matInput [(ngModel)]="rule.monitor">monitor</mat-checkbox>
+          <mat-checkbox matInput [(ngModel)]="rule.debug">debug</mat-checkbox>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-form-field class="full-width">
+          <mat-label>source</mat-label>
+          <input matInput [(ngModel)]="rule.source">
+        </mat-form-field>
+      </mat-list-item>
+      <div mat-subheader>Operators <button mat-icon-button color="primary" [matMenuTriggerFor]="operators">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </div>
+      <mat-list-item class="operators-list" *ngFor="let options of rule.operators">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <app-operator [options]="options"></app-operator>
+          <button mat-icon-button color="primary">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-form-field class="full-width">
+          <mat-label>destination</mat-label>
+          <input matInput [(ngModel)]="rule.destination">
+        </mat-form-field>
+      </mat-list-item>
+    </mat-list>
+    <div fxLayout="row" fxLayoutAlign="end center">
+      <button *ngIf="!passed" mat-flat-button color="primary" (click)="register()">Register</button>
+      <button *ngIf="passed" mat-stroked-button color="primary">Remove</button>
+    </div>
+  </div>
+</mat-expansion-panel>
+
+<mat-menu #operators="matMenu">
+  <button mat-menu-item *ngFor="let alias of aliases" (click)="addOperator(alias)">
+    <span>{{ alias }}</span>
+  </button>
+</mat-menu>
