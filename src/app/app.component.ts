@@ -51,8 +51,7 @@ export class AppComponent {
 
   addRule() {
     this.rules.push({
-      id: `rule-id-${Date.now().toString()}`,
-      readOnLoad: true,
+      id: `${Date.now().toString()}`,
       source: 'digitalData',
       operators: [],
       destination: 'FS.event',
