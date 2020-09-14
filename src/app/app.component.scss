@@ -11,16 +11,24 @@ button {
   height: 94vh;
 }
 
+mat-accordion {
+  margin: 4px;
+}
+
+mat-card {
+  margin: 12px;
+}
+
+mat-expansion-panel {
+  margin-bottom: 8px;
+}
+
 mat-tab-group {
   padding: 12px;
 }
 
 mat-toolbar {
   height: 6vh;
-}
-
-.output-card {
-  margin: 12px;
 }
 
 .sidenav {
