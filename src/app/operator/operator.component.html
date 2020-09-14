@@ -1,0 +1,14 @@
+<div fxLayout="row" fxLayoutAlign="space-around center" [ngSwitch]="options.name">
+  <div class="name-field">{{ options.name }}</div>
+  <app-convert-options *ngSwitchCase="'convert'" [options]="options"></app-convert-options>
+  <app-fan-out-options *ngSwitchCase="'fan-out'" [options]="options"></app-fan-out-options>
+  <app-flatten-options *ngSwitchCase="'flatten'" [options]="options"></app-flatten-options>
+  <app-insert-options *ngSwitchCase="'insert'" [options]="options"></app-insert-options>
+  <app-query-options *ngSwitchCase="'query'" [options]="options"></app-query-options>
+  <app-rename-options *ngSwitchCase="'rename'" [options]="options"></app-rename-options>
+  <mat-form-field class="numeric-field">
+    <mat-label>index</mat-label>
+    <input matInput [(ngModel)]="options.index"
+      matTooltip="Position of the object to convert in the operator input list">
+  </mat-form-field>
+</div>

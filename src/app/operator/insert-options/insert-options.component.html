@@ -1,0 +1,13 @@
+<mat-form-field>
+  <mat-label>select</mat-label>
+  <input matInput [(ngModel)]="options.select" matTooltip="Value inserted, which is found using selector syntax">
+</mat-form-field>
+<mat-form-field>
+  <mat-label>value</mat-label>
+  <input matInput [(ngModel)]="options.value" matTooltip="Literal value to insert">
+</mat-form-field>
+<mat-form-field class="numeric-field">
+  <mat-label>position</mat-label>
+  <input matInput [(ngModel)]="options.position"
+    matTooltip="Where to insert in the output list, negative position will insert from the end">
+</mat-form-field>
