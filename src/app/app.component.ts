@@ -29,7 +29,7 @@ export class AppComponent {
   constructor(
     private datalayerService: DataLayerService,
     public observerService: ObserverService,
-    snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar) {
     this.datalayer = datalayerService.load();
 
     this.observerService.log$.subscribe((event: LogEvent) => {
@@ -63,8 +63,14 @@ export class AppComponent {
     this.logs = [];
   }
 
-  load(type: DefaultDataLayer) {
+  load(datalayer: string) {
+    this.datalayer = this.datalayerService.load(datalayer);
+    this.snackBar.open('Loaded data layer from text area', '', { duration: 2000 });
+  }
+
+  loadSample(type: DefaultDataLayer) {
     this.datalayer = this.datalayerService.instantiate(type as DefaultDataLayer);
+    this.snackBar.open('Loaded sample data layer', '', { duration: 2000 });
   }
 
   printRules(): string {

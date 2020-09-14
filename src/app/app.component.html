@@ -4,7 +4,7 @@
   </button>
   <span>Data Layer Composer</span>
   <span class="spacer"></span>
-  <button mat-stroked-button [matMenuTriggerFor]="models" matTooltip="Load a data layer sample">
+  <button mat-stroked-button [matMenuTriggerFor]="loader" matTooltip="Load data layer">
     <mat-icon>file_copy</mat-icon>
   </button>
   <button mat-stroked-button matTooltip="Add a data layer observer rule" (click)="addRule()">
@@ -18,11 +18,9 @@
   <button mat-stroked-button matTooltip="Clear output and logs" (click)="clear()">
     <mat-icon>restore_page</mat-icon>
   </button>
-  <!--
   <button mat-stroked-button matTooltip="Save data layer and rules to local storage" (click)="save()">
     <mat-icon>save</mat-icon>
   </button>
-   -->
 </mat-toolbar>
 <mat-drawer-container class="container" [hasBackdrop]="false" autosize>
   <mat-drawer #drawer mode="over">
@@ -76,8 +74,15 @@
   </div>
 </mat-drawer-container>
 
-<mat-menu #models="matMenu">
-  <button mat-menu-item (click)="load('ceddl')">
-    <span>CEDDL</span>
+<mat-menu #loader="matMenu">
+  <button mat-menu-item (click)="load(input.innerText)">
+    <span>Current</span>
   </button>
+  <button mat-menu-item [matMenuTriggerFor]="samples">
+    <span>Samples</span>
+  </button>
+</mat-menu>
+
+<mat-menu #samples="matMenu">
+  <button mat-menu-item (click)="loadSample('ceddl')">CEDDL</button>
 </mat-menu>
