@@ -60,18 +60,20 @@ export class SourceComponent implements OnInit {
   }
 
   private index(root: any, path: string) {
-    Object.getOwnPropertyNames(root).forEach(property => {
-      if (typeof root[property] === 'object') {
-        // guard against a list of primitives
-        if (Array.isArray(root[property]) && typeof Array.isArray(root[property][0]) !== 'object') {
-          return;
-        }
+    if (typeof root === 'object' && !Array.isArray(root)) {
+      Object.getOwnPropertyNames(root).forEach(property => {
+        if (typeof root[property] === 'object') {
+          // guard against a list of primitives
+          if (Array.isArray(root[property]) && typeof Array.isArray(root[property][0]) !== 'object') {
+            return;
+          }
 
-        const propertyPath = Array.isArray(root[property]) ? `${path}[${property}]` : `${path}.${property}`;
-        this.sources.push(propertyPath);
-        this.index(root[property], propertyPath);
-      }
-    });
+          const propertyPath = Array.isArray(root[property]) ? `${path}[${property}]` : `${path}.${property}`;
+          this.sources.push(propertyPath);
+          this.index(root[property], propertyPath);
+        }
+      });
+    }
   }
 
   emit(source: string) {
