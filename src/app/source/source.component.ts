@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { DataLayerTarget } from '@fullstory/data-layer-observer';
 
 @Component({
   selector: 'app-source',
@@ -14,7 +15,9 @@ export class SourceComponent implements OnInit {
 
   @Output() sourceChange = new EventEmitter<string>();
 
-  sourceControl = new FormControl();
+  error = '';
+
+  sourceControl = new FormControl('', [Validators.required]);
 
   sources: string[] = [];
 
@@ -25,11 +28,28 @@ export class SourceComponent implements OnInit {
   ngOnInit() {
     this.index((window as any)[this.source], this.source);
     this.filteredSources = this.sourceControl.valueChanges.pipe(
-      map(value => this.filter(value))
+      map(value => this.filterSources(value))
     );
+
+    this.sourceControl.valueChanges.pipe(
+      filter(Boolean),
+      debounceTime(1000),
+      distinctUntilChanged(),
+    ).subscribe((source: string) => {
+      // allows validation even if the user has not moved out of field
+      this.sourceControl.markAsTouched();
+
+      try {
+        DataLayerTarget.find(source);
+        this.sourceControl.setErrors(null);
+        this.sourceChange.emit(source);
+      } catch (err) {
+        this.sourceControl.setErrors({ error: true });
+      }
+    });
   }
 
-  private filter(value: string): string[] {
+  private filterSources(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.sources.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
@@ -50,6 +70,7 @@ export class SourceComponent implements OnInit {
   }
 
   target(source: string) {
+    this.sourceControl.setErrors(null);
     this.sourceChange.emit(source);
   }
 }
