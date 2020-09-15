@@ -15,6 +15,8 @@ export class SourceComponent implements OnInit {
 
   @Output() sourceChange = new EventEmitter<string>();
 
+  @Output() target = new EventEmitter<DataLayerTarget>();
+
   error = '';
 
   sourceControl = new FormControl('', [Validators.required]);
@@ -40,11 +42,14 @@ export class SourceComponent implements OnInit {
       this.sourceControl.markAsTouched();
 
       try {
-        DataLayerTarget.find(source);
+        const t = DataLayerTarget.find(source);
+
         this.sourceControl.setErrors(null);
         this.sourceChange.emit(source);
+        this.target.emit(t);
       } catch (err) {
         this.sourceControl.setErrors({ error: true });
+        this.target.emit(null);
       }
     });
   }
@@ -69,8 +74,12 @@ export class SourceComponent implements OnInit {
     });
   }
 
-  target(source: string) {
+  emit(source: string) {
+    const t = DataLayerTarget.find(source);
+
     this.sourceControl.setErrors(null);
     this.sourceChange.emit(source);
+    this.target.emit(t);
+    console.log(t)
   }
 }

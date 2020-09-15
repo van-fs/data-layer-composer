@@ -52,6 +52,7 @@ export class AppComponent {
   addRule() {
     this.rules.push({
       id: `${Date.now().toString()}`,
+      monitor: true,
       source: 'digitalData',
       operators: [],
       destination: 'FS.event',

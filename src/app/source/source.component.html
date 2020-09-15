@@ -1,7 +1,7 @@
 <mat-form-field class="full-width">
   <input type="text" placeholder="source" matInput [formControl]="sourceControl" [matAutocomplete]="auto">
   <mat-error>Failed to find data layer subject</mat-error>
-  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="target($event.option.value)">
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="emit($event.option.value)">
     <mat-option *ngFor="let source of filteredSources | async" [value]="source">
       {{ source }}
     </mat-option>

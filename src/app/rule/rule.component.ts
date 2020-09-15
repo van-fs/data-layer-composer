@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DataLayerRule, OperatorOptions } from '@fullstory/data-layer-observer';
+import { DataLayerRule, OperatorOptions, DataLayerTarget } from '@fullstory/data-layer-observer';
 import { ObserverService } from '../services/observer.service';
 
 @Component({
@@ -10,6 +10,8 @@ import { ObserverService } from '../services/observer.service';
 export class RuleComponent {
 
   @Input() rule: DataLayerRule;
+
+  target: DataLayerTarget = null;
 
   passed = false;
 
@@ -45,6 +47,10 @@ export class RuleComponent {
 
   register() {
     this.observerService.registerRule(this.rule);
+  }
+
+  targetChange(target: DataLayerTarget) {
+    this.target = target;
   }
 
 }
