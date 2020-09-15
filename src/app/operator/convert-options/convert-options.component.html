@@ -4,5 +4,7 @@
 </mat-form-field>
 <mat-form-field>
   <mat-label>type</mat-label>
-  <input matInput [(ngModel)]="options.type" required matTooltip="The desired type to convert properties to">
+  <mat-select [(ngModel)]="options.type" matTooltip="The desired type to convert properties to">
+    <mat-option *ngFor="let type of types" [value]="type">{{ type }}</mat-option>
+  </mat-select>
 </mat-form-field>

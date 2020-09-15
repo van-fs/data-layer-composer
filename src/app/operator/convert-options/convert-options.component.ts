@@ -9,4 +9,6 @@ import { OperatorOptionsComponent } from '../operator.component';
 })
 export class ConvertOptionsComponent extends OperatorOptionsComponent {
 
+  types = ['bool', 'date', 'int', 'real', 'string'];
+
 }
