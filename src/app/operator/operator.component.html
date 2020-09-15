@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="space-around center" [ngSwitch]="options.name">
   <div class="name-field">{{ options.name }}</div>
-  <app-convert-options *ngSwitchCase="'convert'" [options]="options"></app-convert-options>
+  <app-convert-options *ngSwitchCase="'convert'" [options]="options" [source]="source"></app-convert-options>
   <app-fan-out-options *ngSwitchCase="'fan-out'" [options]="options"></app-fan-out-options>
   <app-flatten-options *ngSwitchCase="'flatten'" [options]="options"></app-flatten-options>
   <app-insert-options *ngSwitchCase="'insert'" [options]="options"></app-insert-options>

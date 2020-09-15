@@ -1,6 +1,8 @@
 <mat-form-field>
   <mat-label>properties</mat-label>
-  <input matInput [(ngModel)]="options.properties" required matTooptip="List of properties to convert">
+  <mat-select multiple matTooltip="List of properties to convert" (selectionChange)="selectProperty($event)">
+    <mat-option *ngFor="let property of properties" [value]="property">{{ property }}</mat-option>
+  </mat-select>
 </mat-form-field>
 <mat-form-field>
   <mat-label>type</mat-label>

@@ -5,6 +5,8 @@ export class OperatorOptionsComponent {
 
   @Input() options: OperatorOptions;
 
+  @Input() source: string;
+
 }
 
 @Component({
@@ -15,5 +17,7 @@ export class OperatorOptionsComponent {
 export class OperatorComponent {
 
   @Input() options: OperatorOptions;
+
+  @Input() source: string;
 
 }

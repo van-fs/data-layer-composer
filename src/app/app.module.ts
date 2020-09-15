@@ -44,7 +44,7 @@ import { SourceComponent } from './source/source.component';
     InsertOptionsComponent,
     QueryOptionsComponent,
     RenameOptionsComponent,
-    SourceComponent
+    SourceComponent,
   ],
   imports: [
     BrowserAnimationsModule,
