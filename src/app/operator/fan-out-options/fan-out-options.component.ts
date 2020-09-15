@@ -19,7 +19,7 @@ export class FanOutOptionsComponent extends OperatorComponent implements OnInit 
     const result = target.query();
 
     Object.getOwnPropertyNames(result).forEach(property => {
-      if (typeof result[property] !== 'object' && typeof result[property] !== 'function') {
+      if (typeof result[property] === 'object') {
         this.properties.push(property);
       }
     });
