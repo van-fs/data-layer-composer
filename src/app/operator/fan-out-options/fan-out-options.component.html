@@ -1,5 +1,8 @@
 <mat-form-field>
   <mat-label>properties</mat-label>
-  <input matInput [(ngModel)]="options.properties" required
-    matTooltip="Desired list of properties to obtain the values and execute the remaining operators">
+  <mat-select required multiple
+    matTooltip="Desired list of properties to obtain the values and execute the remaining operators"
+    (selectionChange)="selectProperty($event)">
+    <mat-option *ngFor="let property of properties" [value]="property">{{ property }}</mat-option>
+  </mat-select>
 </mat-form-field>
