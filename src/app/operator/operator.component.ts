@@ -1,14 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { OperatorOptions } from '@fullstory/data-layer-observer';
 
-export class OperatorOptionsComponent {
-
-  @Input() options: OperatorOptions;
-
-  @Input() source: string;
-
-}
-
 @Component({
   selector: 'app-operator',
   templateUrl: './operator.component.html',

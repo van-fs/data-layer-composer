@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
-import { OperatorOptionsComponent } from '../operator.component';
+import { OperatorComponent } from '../operator.component';
 
 @Component({
   selector: 'app-insert-options',
   templateUrl: './insert-options.component.html',
   styleUrls: ['../operator.component.scss']
 })
-export class InsertOptionsComponent extends OperatorOptionsComponent {
+export class InsertOptionsComponent extends OperatorComponent {
 
 }
