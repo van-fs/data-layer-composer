@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DataLayerRule } from '@fullstory/data-layer-observer';
+import { DataLayerRule, OperatorOptions } from '@fullstory/data-layer-observer';
 import { ObserverService } from '../services/observer.service';
 
 @Component({
@@ -34,6 +34,13 @@ export class RuleComponent {
     this.rule.operators.push({
       name
     });
+  }
+
+  removeOperator(options: OperatorOptions) {
+    const i = this.rule.operators.findIndex(operator => operator === options);
+    if (i !== -1) {
+      this.rule.operators.splice(i, 1);
+    }
   }
 
   register() {

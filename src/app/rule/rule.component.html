@@ -35,7 +35,7 @@
       <mat-list-item class="operators-list" *ngFor="let options of rule.operators">
         <div fxLayout="row" fxLayoutAlign="start center">
           <app-operator [options]="options"></app-operator>
-          <button mat-icon-button color="primary">
+          <button mat-icon-button color="primary" (click)="removeOperator(options)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
