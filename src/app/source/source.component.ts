@@ -80,6 +80,5 @@ export class SourceComponent implements OnInit {
     this.sourceControl.setErrors(null);
     this.sourceChange.emit(source);
     this.target.emit(t);
-    console.log(t)
   }
 }
