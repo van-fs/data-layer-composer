@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -29,6 +30,7 @@ import { FlattenOptionsComponent } from './operator/flatten-options/flatten-opti
 import { InsertOptionsComponent } from './operator/insert-options/insert-options.component';
 import { QueryOptionsComponent } from './operator/query-options/query-options.component';
 import { RenameOptionsComponent } from './operator/rename-options/rename-options.component';
+import { SourceComponent } from './source/source.component';
 
 @NgModule({
   declarations: [
@@ -40,13 +42,15 @@ import { RenameOptionsComponent } from './operator/rename-options/rename-options
     FlattenOptionsComponent,
     InsertOptionsComponent,
     QueryOptionsComponent,
-    RenameOptionsComponent
+    RenameOptionsComponent,
+    SourceComponent
   ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     FlexLayoutModule,
     FormsModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
@@ -62,6 +66,7 @@ import { RenameOptionsComponent } from './operator/rename-options/rename-options
     MatToolbarModule,
     MatTabsModule,
     MatTooltipModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

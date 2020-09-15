@@ -1,0 +1,8 @@
+<mat-form-field class="full-width">
+  <input type="text" placeholder="source" matInput [formControl]="sourceControl" [matAutocomplete]="auto">
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="target($event.option.value)">
+    <mat-option *ngFor="let source of filteredSources | async" [value]="source">
+      {{ source }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
