@@ -95,7 +95,7 @@ export const gaProject: ComposerProject = {
   rules: [
     {
       "id": "fs-ga-page-type",
-      "source": "dataLayer",
+      "source": "dataLayer[0]",
       "operators": [
         { "name": "query", "select": "$[?(pageType, pageName)]" },
         { "name": "insert", "value": "View Page Type" }
@@ -106,7 +106,7 @@ export const gaProject: ComposerProject = {
     },
     {
       "id": "fs-ga-e-commerce-impressions",
-      "source": "dataLayer",
+      "source": "dataLayer[6]",
       "operators": [
         { "name": "query", "select": "$.ecommerce.impressions" },
         { "name": "fan-out" },
@@ -118,7 +118,7 @@ export const gaProject: ComposerProject = {
     },
     {
       "id": "fs-ga-e-commerce-promotions",
-      "source": "dataLayer",
+      "source": "dataLayer[3]",
       "operators": [
         { "name": "query", "select": "$.ecommerce.promoView.promotions" },
         { "name": "fan-out" },
@@ -130,7 +130,7 @@ export const gaProject: ComposerProject = {
     },
     {
       "id": "fs-ga-user-vars",
-      "source": "dataLayer",
+      "source": "dataLayer[2]",
       "operators": [
         { "name": "query", "select": "$[?(userProfile)]" },
         { "name": "flatten" },

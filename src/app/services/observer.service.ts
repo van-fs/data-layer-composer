@@ -44,13 +44,14 @@ export class ObserverService {
     this.observer = new DataLayerObserver(this.config);
   }
 
-  test(rule: ComposerRule, readOnLoad?: boolean, monitor?: boolean, debug?: boolean) {
+  test(rule: ComposerRule, debug?: boolean) {
     // TODO (van) fix this hack
     if (rule.handler) {
       rule.handler.stop();
     }
 
-    const handler = this.observer.registerTarget(rule.target, rule.operators, rule.destination, readOnLoad, monitor, debug);
+    // NOTE the composer doesn't monitor or read on load - it just reads when you click the test button
+    const handler = this.observer.registerTarget(rule.target, rule.operators, rule.destination, false, false, debug);
     rule.handler = handler;
     rule.handler.fireEvent(rule.target.query());
   }
