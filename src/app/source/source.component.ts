@@ -29,6 +29,11 @@ export class SourceComponent implements OnInit {
 
   ngOnInit() {
     this.index((window as any)[this.source], this.source);
+
+    if (this.source) {
+      this.sourceControl.setValue(this.source);
+      this.emit(this.source);
+    }
     this.filteredSources = this.sourceControl.valueChanges.pipe(
       map(value => this.filterSources(value))
     );
@@ -40,17 +45,7 @@ export class SourceComponent implements OnInit {
     ).subscribe((source: string) => {
       // allows validation even if the user has not moved out of field
       this.sourceControl.markAsTouched();
-
-      try {
-        const t = DataLayerTarget.find(source);
-
-        this.sourceControl.setErrors(null);
-        this.sourceChange.emit(source);
-        this.target.emit(t);
-      } catch (err) {
-        this.sourceControl.setErrors({ error: true });
-        this.target.emit(null);
-      }
+      this.emit(source);
     });
   }
 
@@ -77,10 +72,15 @@ export class SourceComponent implements OnInit {
   }
 
   emit(source: string) {
-    const t = DataLayerTarget.find(source);
+    try {
+      const t = DataLayerTarget.find(source);
 
-    this.sourceControl.setErrors(null);
-    this.sourceChange.emit(source);
-    this.target.emit(t);
+      this.sourceControl.setErrors(null);
+      this.sourceChange.emit(source);
+      this.target.emit(t);
+    } catch (err) {
+      this.sourceControl.setErrors({ error: true });
+      this.target.emit(null);
+    }
   }
 }
