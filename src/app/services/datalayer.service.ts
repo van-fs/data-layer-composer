@@ -1,27 +1,17 @@
 import { Injectable } from '@angular/core';
 
-import basicDigitalData from '../models/CEDDL';
-
-export type DefaultDataLayer = 'ceddl';
-
 @Injectable({
   providedIn: 'root'
 })
 export class DataLayerService {
 
-  instantiate(type: DefaultDataLayer): string {
-    switch (type) {
-      case 'ceddl':
-        return this.load(JSON.stringify(basicDigitalData));
-      default:
-        return '';
-    }
+  instantiate(variable: string, data: object): string {
+    return this.load(variable, JSON.stringify(data));
   }
 
-  load(datalayer?: string): string {
-    (window as any).digitalData = datalayer ? JSON.parse(datalayer) :
-      localStorage.getItem('datalayer') ? JSON.parse(localStorage.getItem('datalayer')) : {};
-    return JSON.stringify((window as any).digitalData, null, 2);
+  load(variable: string, datalayer?: string | object): string {
+    (window as any)[variable] = typeof datalayer === 'string' ? JSON.parse(datalayer) : datalayer;
+    return JSON.stringify((window as any)[variable], null, 2);
   }
 
   save() {

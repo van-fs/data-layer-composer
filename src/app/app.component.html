@@ -43,12 +43,19 @@
     <mat-tab-group #datalayerTabs fxFlex="40">
       <mat-tab label="Data Layer">
         <mat-card>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-form-field class="full-width">
+              <mat-label>variable</mat-label>
+              <input required matInput [(ngModel)]="variable">
+            </mat-form-field>
+            <button mat-flat-button (click)="load(input.innerText)" color="primary">Load</button>
+          </div>
           <pre #input id="input" class="datalayer-input" contenteditable="true">{{ datalayer }}</pre>
         </mat-card>
       </mat-tab>
       <mat-tab label="Observer Output">
-        <mat-card *ngFor="let data of output">
-          <pre>{{ data }}</pre>
+        <mat-card>
+          <pre>{{ output }}</pre>
         </mat-card>
       </mat-tab>
       <mat-tab label="Observer Log">
@@ -65,24 +72,34 @@
           <app-rule *ngFor="let rule of rules" [rule]="rule"></app-rule>
         </mat-accordion>
       </mat-tab>
-      <mat-tab label="JSON">
-        <mat-card>
-          <pre contenteditable="true">{{ printRules() }}</pre>
-        </mat-card>
-      </mat-tab>
     </mat-tab-group>
   </div>
 </mat-drawer-container>
 
 <mat-menu #loader="matMenu">
-  <button mat-menu-item (click)="load(input.innerText)">
-    <span>Current</span>
+  <button mat-menu-item [matMenuTriggerFor]="adobe">
+    <span>Adobe</span>
   </button>
-  <button mat-menu-item [matMenuTriggerFor]="samples">
-    <span>Samples</span>
+  <button mat-menu-item [matMenuTriggerFor]="ceddl">
+    <span>CEDDL</span>
+  </button>
+  <button mat-menu-item [matMenuTriggerFor]="google">
+    <span>Google</span>
   </button>
 </mat-menu>
 
-<mat-menu #samples="matMenu">
-  <button mat-menu-item (click)="loadSample('ceddl')">CEDDL</button>
+<mat-menu #adobe="matMenu">
+  <button mat-menu-item (click)="loadSample('adobe-app-measurement')">AppMeasurement</button>
+</mat-menu>
+
+<mat-menu #ceddl="matMenu">
+  <button mat-menu-item (click)="loadSample('ceddl-cart')">cart</button>
+  <button mat-menu-item (click)="loadSample('ceddl-page')">page</button>
+  <button mat-menu-item (click)="loadSample('ceddl-product')">product</button>
+  <button mat-menu-item (click)="loadSample('ceddl-transaction')">transaction</button>
+  <button mat-menu-item (click)="loadSample('ceddl-user')">user</button>
+</mat-menu>
+
+<mat-menu #google="matMenu">
+  <button mat-menu-item (click)="loadSample('ga')">Analytics</button>
 </mat-menu>

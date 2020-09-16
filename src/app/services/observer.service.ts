@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataLayerRule, DataLayerConfig, DataLayerObserver, LogEvent, LogAppender } from '@fullstory/data-layer-observer';
 import { Subject } from 'rxjs';
+import { ComposerRule } from '../models/composer-rule';
 
 class ComposerAppender implements LogAppender {
 
@@ -41,6 +42,17 @@ export class ObserverService {
 
   constructor() {
     this.observer = new DataLayerObserver(this.config);
+  }
+
+  test(rule: ComposerRule, readOnLoad?: boolean, monitor?: boolean, debug?: boolean) {
+    // TODO (van) fix this hack
+    if (rule.handler) {
+      rule.handler.stop();
+    }
+
+    const handler = this.observer.registerTarget(rule.target, rule.operators, rule.destination, readOnLoad, monitor, debug);
+    rule.handler = handler;
+    rule.handler.fireEvent(rule.target.query());
   }
 
   registerRule(rule: DataLayerRule) {

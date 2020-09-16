@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { DataLayerRule, OperatorOptions, DataLayerTarget } from '@fullstory/data-layer-observer';
+import { OperatorOptions, DataLayerTarget } from '@fullstory/data-layer-observer';
 import { ObserverService } from '../services/observer.service';
+import { ComposerRule } from '../models/composer-rule';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-rule',
@@ -9,11 +11,13 @@ import { ObserverService } from '../services/observer.service';
 })
 export class RuleComponent {
 
-  @Input() rule: DataLayerRule;
+  @Input() rule: ComposerRule;
+
+  mode = 'rule';
 
   target: DataLayerTarget = null;
 
-  passed = false;
+  serialized = '';
 
   aliases = [
     'convert',
@@ -24,12 +28,8 @@ export class RuleComponent {
     'rename',
   ];
 
-  constructor(private observerService: ObserverService) {
-    this.observerService.registered$.subscribe(rule => {
-      if (rule === this.rule) {
-        this.passed = true;
-      }
-    });
+  constructor(private snackBar: MatSnackBar, private observerService: ObserverService) {
+
   }
 
   addOperator(name: string) {
@@ -39,18 +39,25 @@ export class RuleComponent {
   }
 
   removeOperator(options: OperatorOptions) {
-    const i = this.rule.operators.findIndex(operator => operator === options);
-    if (i !== -1) {
-      this.rule.operators.splice(i, 1);
-    }
+    this.rule.removeOperator(options);
   }
 
-  register() {
-    this.observerService.registerRule(this.rule);
+  setMode(mode: string) {
+    this.mode = mode;
+  }
+
+  test() {
+    try {
+      this.observerService.test(this.rule);
+      this.serialized = JSON.stringify(this.rule.toDataLayerRule(), null, 2);
+    } catch (err) {
+      this.snackBar.open(err.message, '', { duration: 4000 });
+    }
   }
 
   targetChange(target: DataLayerTarget) {
     this.target = target;
+    this.rule.target = target;
   }
 
 }

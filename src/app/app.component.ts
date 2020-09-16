@@ -1,10 +1,13 @@
 import { Component, ViewChild, } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DataLayerRule, LogEvent } from '@fullstory/data-layer-observer';
-
-import { DataLayerService, DefaultDataLayer } from 'src/app/services/datalayer.service';
-import { ObserverService } from './services/observer.service';
 import { MatTabGroup } from '@angular/material/tabs';
+import { LogEvent, DataLayerRule } from '@fullstory/data-layer-observer';
+
+import { ComposerRule } from './models/composer-rule';
+import { DataLayerService } from 'src/app/services/datalayer.service';
+import { ObserverService } from './services/observer.service';
+
+import { appMeasurementProject, cartProject, pageProject, productProject, transactionProject, userProject, gaProject } from './samples';
 
 @Component({
   selector: 'app-root',
@@ -20,17 +23,17 @@ export class AppComponent {
 
   logs: LogEvent[] = [];
 
-  output: string[] = [];
+  output: string;
 
-  rules: DataLayerRule[] = [];
+  rules: ComposerRule[] = [];
 
-  registered: DataLayerRule[] = [];
+  variable = 'digitalData';
 
   constructor(
     private datalayerService: DataLayerService,
     public observerService: ObserverService,
     private snackBar: MatSnackBar) {
-    this.datalayer = datalayerService.load();
+    this.datalayer = datalayerService.load('digitalData');
 
     this.observerService.log$.subscribe((event: LogEvent) => {
       snackBar.open(event.message, '', { duration: 4000 });
@@ -39,47 +42,79 @@ export class AppComponent {
     });
 
     this.observerService.output$.subscribe((data: any[]) => {
-      this.output.push(JSON.stringify(data, null, 2));
+      this.output = JSON.stringify(data, null, 2);
       this.datalayerTabs.selectedIndex = 1;
-    });
-
-    this.observerService.registered$.subscribe((rule: DataLayerRule) => {
-      this.registered.push(rule);
-      snackBar.open('Successfully registered rule', '', { duration: 2000 });
     });
   }
 
   addRule() {
-    this.rules.push({
-      id: `${Date.now().toString()}`,
-      monitor: true,
-      source: 'digitalData',
-      operators: [],
-      destination: 'FS.event',
-    });
+    this.rules.push(new ComposerRule(this.variable));
   }
 
   clear() {
-    this.output = [];
+    this.output = '';
     this.logs = [];
   }
 
   load(datalayer: string) {
-    this.datalayer = this.datalayerService.load(datalayer);
-    this.snackBar.open('Loaded data layer from text area', '', { duration: 2000 });
+    this.datalayer = this.datalayerService.load(this.variable, datalayer);
+    this.snackBar.open(`Loaded data layer into ${this.variable}`, '', { duration: 2000 });
   }
 
-  loadSample(type: DefaultDataLayer) {
-    this.datalayer = this.datalayerService.instantiate(type as DefaultDataLayer);
-    this.snackBar.open('Loaded sample data layer', '', { duration: 2000 });
-  }
+  loadSample(id: string) {
+    this.rules = [];
+    let rules: DataLayerRule[] = [];
 
-  printRules(): string {
-    return JSON.stringify(this.registered, null, 2);
-  }
+    switch (id) {
+      case 'adobe-app-measurement':
+        this.variable = appMeasurementProject.variable;
+        this.datalayer = this.datalayerService.load(this.variable, appMeasurementProject.datalayer);
+        rules = appMeasurementProject.rules;
+        break;
+      case 'ceddl-cart':
+        this.variable = cartProject.variable;
+        this.datalayer = this.datalayerService.load(this.variable, cartProject.datalayer);
+        rules = cartProject.rules;
+        break;
+      case 'ceddl-page':
+        this.variable = cartProject.variable;
+        this.datalayer = this.datalayerService.load(this.variable, pageProject.datalayer);
+        rules = pageProject.rules;
+        break;
+      case 'ceddl-product':
+        this.variable = cartProject.variable;
+        this.datalayer = this.datalayerService.load(this.variable, productProject.datalayer);
+        rules = productProject.rules;
+        break;
+      case 'ceddl-transaction':
+        this.variable = cartProject.variable;
+        this.datalayer = this.datalayerService.load(this.variable, transactionProject.datalayer);
+        rules = transactionProject.rules;
+        break;
+      case 'ceddl-user':
+        this.variable = cartProject.variable;
+        this.datalayer = this.datalayerService.load(this.variable, userProject.datalayer);
+        rules = userProject.rules;
+        break;
+      case 'ga':
+        this.variable = gaProject.variable;
+        this.datalayer = this.datalayerService.load(this.variable, gaProject.datalayer);
+        rules = gaProject.rules;
+        break;
+      default:
+    }
 
-  run() {
-    this.observerService.fireEvents();
+    rules.forEach(rule => {
+      const composerRule = new ComposerRule(rule.source, rule.destination as string, rule.id, rule.description);
+      rule.operators.forEach(operator => {
+        composerRule.addOperator(operator);
+      });
+
+      this.rules.push(composerRule);
+    });
+
+    this.datalayerTabs.selectedIndex = 0;
+    this.snackBar.open(`Loaded project ${id} into ${this.variable}`, '', { duration: 2000 });
   }
 
   save() {
