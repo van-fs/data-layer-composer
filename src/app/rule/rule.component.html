@@ -1,12 +1,18 @@
 <mat-card>
-  <mat-card-header fxLayout="row" fxLayoutAlign="end center">
+  <mat-card-header fxLayout="row" fxLayoutAlign="end start">
     <mat-card-title *ngIf="mode === 'json'">{{ rule.id }}</mat-card-title>
     <mat-card-subtitle *ngIf="mode === 'json'"> {{ rule.description }}</mat-card-subtitle>
     <div class="filler"></div>
-    <button mat-icon-button (click)="setMode('rule')">
+    <button *ngIf="mode === 'rule'" button mat-flat-button color="primary" (click)="setMode('rule')">
       <mat-icon>rule</mat-icon>
     </button>
-    <button mat-icon-button (click)="setMode('json')">
+    <button *ngIf="mode === 'json'" button mat-stroked-button color="primary" (click)="setMode('rule')">
+      <mat-icon>rule</mat-icon>
+    </button>
+    <button *ngIf="mode === 'json'" button mat-flat-button color="primary" (click)="setMode('json')">
+      <mat-icon>code</mat-icon>
+    </button>
+    <button *ngIf="mode === 'rule'" button mat-stroked-button color="primary" (click)="setMode('json')">
       <mat-icon>code</mat-icon>
     </button>
   </mat-card-header>
@@ -55,7 +61,10 @@
         </mat-list-item>
       </mat-list>
     </div>
-    <pre *ngIf="mode === 'json'">{{ serialized }}</pre>
+    <div *ngIf="mode === 'json'">
+      <pre *ngIf="serialized !== ''">{{ serialized }}</pre>
+      <h3 *ngIf="serialized === ''">Test the rule to create JSON</h3>
+    </div>
   </mat-card-content>
 
   <mat-card-actions *ngIf="mode === 'rule'" fxLayout="row" fxLayoutAlign="end center">
@@ -64,7 +73,6 @@
     <button mat-flat-button color="primary" [matMenuTriggerFor]="operators" [disabled]="target === null">Add
       Operator</button>
     <button mat-flat-button color="primary" (click)="test()" [disabled]="target === null">Test</button>
-    <button *ngIf="rule.verified" mat-stroked-button color="primary">Remove</button>
   </mat-card-actions>
 </mat-card>
 
