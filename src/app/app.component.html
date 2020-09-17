@@ -45,10 +45,34 @@
         <mat-card>
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-form-field class="full-width">
-              <mat-label>variable</mat-label>
+              <mat-label>Data Layer Global Variable</mat-label>
               <input required matInput [(ngModel)]="variable">
             </mat-form-field>
-            <button mat-flat-button (click)="load(input.innerText)" color="primary">Load</button>
+            <button class="button-left-margin" mat-flat-button matTooltip="Copy data layer code snippet to clipboard"
+              color="primary" (click)="copySnippet()">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+            <button mat-flat-button matTooltip="Paste and load data layer from clipboard" color="primary"
+              (click)="pasteDataLayer()">
+              <mat-icon>content_paste</mat-icon>
+            </button>
+            <button mat-flat-button matTooltip="Load data layer from input text" color="primary"
+              (click)="load(input.innerText)">
+              <mat-icon>publish</mat-icon>
+            </button>
+          </div>
+          <div *ngIf="!datalayer">
+            <h3>Follow these steps to load your data layer.</h3>
+            <ol>
+              <li>Update the Data Layer Global Variable based on your data layer.</li>
+              <li>Click the copy button to copy JavaScript to your clipboard.</li>
+              <li>In another tab, visit your site and perform any actions to prime the data layer.</li>
+              <li>Run the JavaScript by pasting (<code>cmd</code> + <code>v</code> or <code>ctrl</code> +
+                <code>v</code>) your clipboard into your browser's console.</li>
+              <li>Hit <code>enter</code> to load the JavaScript.</li>
+              <li>Click any white space in the site to run the JavaScript.</li>
+              <li>Use the paste button to load the data layer here.</li>
+            </ol>
           </div>
           <pre #input id="input" class="datalayer-input" contenteditable="true">{{ datalayer }}</pre>
         </mat-card>

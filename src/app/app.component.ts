@@ -17,7 +17,7 @@ import { appMeasurementProject, cartProject, pageProject, productProject, transa
 export class AppComponent {
   title = 'Data Layer Composer';
 
-  datalayer = 'Paste your data layer here ...';
+  datalayer = '';
 
   @ViewChild('datalayerTabs', { static: false }) datalayerTabs: MatTabGroup;
 
@@ -33,7 +33,6 @@ export class AppComponent {
     private datalayerService: DataLayerService,
     public observerService: ObserverService,
     private snackBar: MatSnackBar) {
-    this.datalayer = datalayerService.load('digitalData');
 
     this.observerService.log$.subscribe((event: LogEvent) => {
       snackBar.open(event.message, '', { duration: 4000 });
@@ -51,6 +50,25 @@ export class AppComponent {
     this.rules.push(new ComposerRule(this.variable));
   }
 
+  async copySnippet() {
+    await navigator.clipboard.writeText(`((datalayer) => {
+      if (!datalayer) alert("Data layer not found");
+      function copy() {
+        navigator.clipboard.writeText(JSON.stringify(datalayer, null, 2)).then(() =>
+          alert("Data layer copied to clipboard"), (err) => console.err(err));
+      }
+      document.addEventListener("click", copy);
+    })(DATALAYER);
+    `.replace('DATALAYER', this.variable));
+
+    this.snackBar.open(`Copied snippet to clipboard`, '', { duration: 2000 });
+  }
+
+  async pasteDataLayer() {
+    this.datalayer = await navigator.clipboard.readText();
+    this.load(this.datalayer);
+  }
+
   clear() {
     this.output = '';
     this.logs = [];
@@ -58,6 +76,7 @@ export class AppComponent {
 
   load(datalayer: string) {
     this.datalayer = this.datalayerService.load(this.variable, datalayer);
+    console.log(this.datalayer)
     this.snackBar.open(`Loaded data layer into ${this.variable}`, '', { duration: 2000 });
   }
 
