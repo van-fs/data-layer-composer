@@ -63,7 +63,7 @@ export class SourceComponent implements OnInit {
             return;
           }
 
-          const propertyPath = Array.isArray(root[property]) ? `${path}[${property}]` : `${path}.${property}`;
+          const propertyPath = Array.isArray(root[property]) ? `${path}[0]` : `${path}.${property}`;
           this.sources.push(propertyPath);
           this.index(root[property], propertyPath);
         }

@@ -1,4 +1,4 @@
-import { Component, ViewChild, } from '@angular/core';
+import { Component, ViewChild, OnInit, } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabGroup } from '@angular/material/tabs';
 import { LogEvent, DataLayerRule } from '@fullstory/data-layer-observer';
@@ -14,7 +14,7 @@ import { appMeasurementProject, cartProject, pageProject, productProject, transa
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Data Layer Composer';
 
   datalayer = '';
@@ -46,8 +46,21 @@ export class AppComponent {
     });
   }
 
+  ngOnInit() {
+    let path = window.location.pathname;
+
+    if (path) {
+      path = path.substring(1); // remove leading /
+      if (path.startsWith('sample')) {
+        this.loadSample(path);
+      } else {
+        // get from firebase
+      }
+    }
+  }
+
   addRule() {
-    this.rules.push(new ComposerRule(this.variable));
+    this.rules.unshift(new ComposerRule(this.variable));
   }
 
   async copySnippet() {
@@ -85,37 +98,37 @@ export class AppComponent {
     let rules: DataLayerRule[] = [];
 
     switch (id) {
-      case 'adobe-app-measurement':
+      case 'sample-adobe-app-measurement':
         this.variable = appMeasurementProject.variable;
         this.datalayer = this.datalayerService.load(this.variable, appMeasurementProject.datalayer);
         rules = appMeasurementProject.rules;
         break;
-      case 'ceddl-cart':
+      case 'sample-ceddl-cart':
         this.variable = cartProject.variable;
         this.datalayer = this.datalayerService.load(this.variable, cartProject.datalayer);
         rules = cartProject.rules;
         break;
-      case 'ceddl-page':
+      case 'sample-ceddl-page':
         this.variable = cartProject.variable;
         this.datalayer = this.datalayerService.load(this.variable, pageProject.datalayer);
         rules = pageProject.rules;
         break;
-      case 'ceddl-product':
+      case 'sample-ceddl-product':
         this.variable = cartProject.variable;
         this.datalayer = this.datalayerService.load(this.variable, productProject.datalayer);
         rules = productProject.rules;
         break;
-      case 'ceddl-transaction':
+      case 'sample-ceddl-transaction':
         this.variable = cartProject.variable;
         this.datalayer = this.datalayerService.load(this.variable, transactionProject.datalayer);
         rules = transactionProject.rules;
         break;
-      case 'ceddl-user':
+      case 'sample-ceddl-user':
         this.variable = cartProject.variable;
         this.datalayer = this.datalayerService.load(this.variable, userProject.datalayer);
         rules = userProject.rules;
         break;
-      case 'ga':
+      case 'sample-ga':
         this.variable = gaProject.variable;
         this.datalayer = this.datalayerService.load(this.variable, gaProject.datalayer);
         rules = gaProject.rules;
@@ -129,11 +142,19 @@ export class AppComponent {
         composerRule.addOperator(operator);
       });
 
+      if (id.startsWith('sample')) {
+        composerRule.removable = false;
+      }
+
       this.rules.push(composerRule);
     });
 
     this.datalayerTabs.selectedIndex = 0;
     this.snackBar.open(`Loaded project ${id} into ${this.variable}`, '', { duration: 2000 });
+  }
+
+  newProject() {
+    location.href = '/';
   }
 
   save() {

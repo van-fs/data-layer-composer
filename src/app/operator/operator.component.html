@@ -1,7 +1,14 @@
-<div fxLayout="row" fxLayoutAlign="space-around center" [ngSwitch]="options.name">
+<div fxLayout="row" fxLayoutAlign="start center" [ngSwitch]="options.name">
+  <button mat-icon-button color="primary" matTooltip="Drag to reorder">
+    <mat-icon class="drag">drag_indicator</mat-icon>
+  </button>
   <div class="name-field">{{ options.name }}</div>
-  <app-convert-options *ngSwitchCase="'convert'" [options]="options" [source]="source"></app-convert-options>
-  <app-fan-out-options *ngSwitchCase="'fan-out'" [options]="options" [source]="source"></app-fan-out-options>
+  <mat-slide-toggle class="pad-right" color="primary" [(ngModel)]="operator.enabled"></mat-slide-toggle>
+  <button class="pad-right" mat-icon-button color="primary" (click)="remove()">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <app-convert-options *ngSwitchCase="'convert'" [options]="options" [data]="data"></app-convert-options>
+  <app-fan-out-options *ngSwitchCase="'fan-out'" [options]="options" [data]="data"></app-fan-out-options>
   <app-flatten-options *ngSwitchCase="'flatten'" [options]="options"></app-flatten-options>
   <app-insert-options *ngSwitchCase="'insert'" [options]="options"></app-insert-options>
   <app-query-options *ngSwitchCase="'query'" [options]="options"></app-query-options>

@@ -19,11 +19,8 @@ export class ConvertOptionsComponent extends OperatorComponent implements OnInit
   types = ['bool', 'date', 'int', 'real', 'string'];
 
   ngOnInit() {
-    const target = DataLayerTarget.find(this.source);
-
     if (!this.options.properties) {
-      const result = target.query();
-
+      const result = this.data;
       Object.getOwnPropertyNames(result).forEach(property => {
         if (typeof result[property] !== 'object' && typeof result[property] !== 'function') {
           this.properties.push(property);
@@ -38,8 +35,6 @@ export class ConvertOptionsComponent extends OperatorComponent implements OnInit
     if (this.options.properties) {
       this.propertySelect.options.forEach(option => {
         if (this.options.properties.indexOf(option.value) > -1) {
-          console.log(option.value)
-
           try {
             option.select();
           } catch (err) {

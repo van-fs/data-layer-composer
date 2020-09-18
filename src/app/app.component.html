@@ -4,21 +4,19 @@
   </button>
   <span>Data Layer Composer</span>
   <span class="spacer"></span>
-  <button mat-stroked-button [matMenuTriggerFor]="loader" matTooltip="Load data layer">
-    <mat-icon>file_copy</mat-icon>
+  <button mat-stroked-button matTooltip="Create new project" (click)="newProject()">
+    <mat-icon>create_new_folder</mat-icon>
   </button>
-  <button mat-stroked-button matTooltip="Add a data layer observer rule" (click)="addRule()">
+  <button mat-stroked-button [matMenuTriggerFor]="loader" matTooltip="Load sample project">
+    <mat-icon>folder</mat-icon>
+  </button>
+  <button mat-stroked-button matTooltip="Add a data layer observer rule" (click)="addRule()" [disabled]="!datalayer">
     <mat-icon>add_circle</mat-icon>
   </button>
-  <!--
-  <button mat-stroked-button matTooltip="Run data layer observer" (click)="run()">
-    <mat-icon>play_circle_filled</mat-icon>
-  </button>
-  -->
-  <button mat-stroked-button matTooltip="Clear output and logs" (click)="clear()">
+  <button mat-stroked-button matTooltip="Clear output and logs" (click)="clear()" [disabled]="!datalayer">
     <mat-icon>restore_page</mat-icon>
   </button>
-  <button mat-stroked-button matTooltip="Save data layer and rules to local storage" (click)="save()">
+  <button mat-stroked-button matTooltip="Save data layer and rules to local storage" [disabled]="!datalayer">
     <mat-icon>save</mat-icon>
   </button>
 </mat-toolbar>
@@ -93,7 +91,9 @@
     <mat-tab-group fxFlex="60">
       <mat-tab label="Rule Set">
         <mat-accordion multi>
-          <app-rule *ngFor="let rule of rules" [rule]="rule"></app-rule>
+          <div *ngFor="let rule of rules">
+            <app-rule *ngIf="!rule.removed" [rule]="rule"></app-rule>
+          </div>
         </mat-accordion>
       </mat-tab>
     </mat-tab-group>
@@ -113,17 +113,17 @@
 </mat-menu>
 
 <mat-menu #adobe="matMenu">
-  <button mat-menu-item (click)="loadSample('adobe-app-measurement')">AppMeasurement</button>
+  <a mat-menu-item href="sample-adobe-app-measurement">AppMeasurement</a>
 </mat-menu>
 
 <mat-menu #ceddl="matMenu">
-  <button mat-menu-item (click)="loadSample('ceddl-cart')">cart</button>
-  <button mat-menu-item (click)="loadSample('ceddl-page')">page</button>
-  <button mat-menu-item (click)="loadSample('ceddl-product')">product</button>
-  <button mat-menu-item (click)="loadSample('ceddl-transaction')">transaction</button>
-  <button mat-menu-item (click)="loadSample('ceddl-user')">user</button>
+  <a mat-menu-item href="sample-ceddl-cart">cart</a>
+  <a mat-menu-item href="sample-ceddl-page">page</a>
+  <a mat-menu-item href="sample-ceddl-product">product</a>
+  <a mat-menu-item href="sample-ceddl-transaction">transaction</a>
+  <a mat-menu-item href="sample-ceddl-user">user</a>
 </mat-menu>
 
 <mat-menu #google="matMenu">
-  <button mat-menu-item (click)="loadSample('ga')">Analytics</button>
+  <a mat-menu-item (click)="loadSample('sample-ga')">Analytics</a>
 </mat-menu>

@@ -15,8 +15,7 @@ export class FanOutOptionsComponent extends OperatorComponent implements OnInit 
   properties: string[] = [];
 
   ngOnInit() {
-    const target = DataLayerTarget.find(this.source);
-    const result = target.query();
+    const result = this.data;
 
     Object.getOwnPropertyNames(result).forEach(property => {
       if (typeof result[property] === 'object') {

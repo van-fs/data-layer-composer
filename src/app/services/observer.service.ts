@@ -27,7 +27,7 @@ export class ObserverService {
 
   config: DataLayerConfig = {
     appender: new ComposerAppender(this.log$),
-    beforeDestination: { name: 'suffix' },
+    // beforeDestination: { name: 'suffix' },
     // @ts-ignore
     previewDestination: (...data: any[]) => {
       this.output$.next(data);
@@ -51,7 +51,8 @@ export class ObserverService {
     }
 
     // NOTE the composer doesn't monitor or read on load - it just reads when you click the test button
-    const handler = this.observer.registerTarget(rule.target, rule.operators, rule.destination, false, false, debug);
+    const handler = this.observer.registerTarget(rule.target, rule.operators.filter(o => o.enabled)
+      .map(o => o.options), rule.destination, false, false, debug);
     rule.handler = handler;
     rule.handler.fireEvent(rule.target.query());
   }
