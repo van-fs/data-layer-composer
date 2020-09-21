@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { OperatorOptions, DataLayerTarget } from '@fullstory/data-layer-observer';
 import { ObserverService } from '../services/observer.service';
 import { ComposerRule } from '../models/composer-rule';
@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ComposerOperator } from '../models/composer-operator';
 import { DataLayerService } from '../services/datalayer.service';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-rule',
@@ -14,13 +15,15 @@ import { DataLayerService } from '../services/datalayer.service';
 })
 export class RuleComponent implements OnInit {
 
+  @ViewChild('ruleTabs', { static: false }) ruleTabs: MatTabGroup;
+
   @Input() rule: ComposerRule;
 
   mode = 'rule';
 
   target: DataLayerTarget = null;
 
-  lastOutput: any;
+  stepData: any[] = [];
 
   serialized = '';
 
@@ -33,21 +36,21 @@ export class RuleComponent implements OnInit {
     'rename',
   ];
 
+  output: string;
+
   constructor(
-    private datalayerService: DataLayerService,
     private snackBar: MatSnackBar,
     private observerService: ObserverService
   ) {
-    this.observerService.output$.subscribe((data: any[]) => {
-      this.lastOutput = data.length === 1 ? data[0] : data;
-    });
+
   }
 
   ngOnInit() {
-    this.lastOutput = this.datalayerService.find(this.rule.source);
+
   }
 
   addOperator(name: string) {
+    this.test();  // ensure the most up to date output
     this.rule.operators.push(new ComposerOperator({
       name
     }));
@@ -55,6 +58,7 @@ export class RuleComponent implements OnInit {
 
   drop(event: CdkDragDrop<any[]>) {
     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    this.test();
   }
 
   removeOperator(options: OperatorOptions) {
@@ -69,12 +73,32 @@ export class RuleComponent implements OnInit {
     this.rule.removed = true;
   }
 
-  test() {
+  test(showOutput = false) {
+    this.stepData[0] = [this.rule.target.query()];
+    console.debug(`stepData[0] ${JSON.stringify(this.stepData[0])}`);
+
     try {
-      this.observerService.test(this.rule);
+      for (let i = 0; i < this.rule.operators.length; i++) {
+        const options = this.rule.operators.slice(0, i + 1).filter(operator => operator.enabled).map(operator => operator.options);
+        this.observerService.test(this.rule.target, options, (...data) => {
+
+          this.stepData[i + 1] = data;
+          console.debug(`[${i + 1}] output ${JSON.stringify(data)}`);
+        });
+      }
+
+      // NOTE that the rule.operators length is 1 less than the stepData always
+      this.output = JSON.stringify(this.stepData[this.rule.operators.length], null, 2);
+      console.debug(JSON.stringify(this.stepData, null, 2));
+
+      if (showOutput) {
+        this.ruleTabs.selectedIndex = 1;
+      }
+
       this.serialized = JSON.stringify(this.rule.toDataLayerRule(), null, 2);
     } catch (err) {
       this.snackBar.open(err.message, '', { duration: 4000 });
+      console.error(err);
     }
   }
 

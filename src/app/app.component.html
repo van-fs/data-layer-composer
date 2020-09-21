@@ -37,10 +37,10 @@
     </mat-list>
   </mat-drawer>
 
-  <div class="sidenav" fxLayout="row" fxLayoutAlign="start stretch">
-    <mat-tab-group #datalayerTabs fxFlex="40">
-      <mat-tab label="Data Layer">
-        <mat-card>
+  <div class="sidenav">
+    <div fxFlex="40">
+      <mat-card>
+        <mat-card-content>
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-form-field class="full-width">
               <mat-label>Data Layer Global Variable</mat-label>
@@ -73,30 +73,14 @@
             </ol>
           </div>
           <pre #input id="input" class="datalayer-input" contenteditable="true">{{ datalayer }}</pre>
-        </mat-card>
-      </mat-tab>
-      <mat-tab label="Observer Output">
-        <mat-card>
-          <pre>{{ output }}</pre>
-        </mat-card>
-      </mat-tab>
-      <mat-tab label="Observer Log">
-        <mat-card *ngFor="let event of logs">
-          <mat-icon *ngIf="event.level === 0" color="warn">error</mat-icon>
-          <mat-icon *ngIf="event.level === 1" color="accent">warning</mat-icon>
-          {{ event.message }}
-        </mat-card>
-      </mat-tab>
-    </mat-tab-group>
-    <mat-tab-group fxFlex="60">
-      <mat-tab label="Rule Set">
-        <mat-accordion multi>
-          <div *ngFor="let rule of rules">
-            <app-rule *ngIf="!rule.removed" [rule]="rule"></app-rule>
-          </div>
-        </mat-accordion>
-      </mat-tab>
-    </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex="60" fxLayout="column" fxLayoutAlign="start stretch">
+      <mat-card *ngFor="let rule of rules">
+        <app-rule [rule]="rule"></app-rule>
+      </mat-card>
+    </div>
   </div>
 </mat-drawer-container>
 
@@ -125,5 +109,5 @@
 </mat-menu>
 
 <mat-menu #google="matMenu">
-  <a mat-menu-item (click)="loadSample('sample-ga')">Analytics</a>
+  <a mat-menu-item href="sample-ga">Analytics</a>
 </mat-menu>

@@ -4,8 +4,6 @@ import { ComposerOperator } from './composer-operator';
 
 export class ComposerRule {
 
-  handler: DataHandler;
-
   operators: ComposerOperator[] = [];
 
   private _target: DataLayerTarget;

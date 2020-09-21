@@ -1,4 +1,1 @@
-<mat-form-field>
-  <mat-label>select</mat-label>
-  <input matInput [(ngModel)]="options.select" required matTooltip="Selector used to perform the query" value="$">
-</mat-form-field>
+<app-select [object]="data[index]" [(selector)]="options.select"></app-select>

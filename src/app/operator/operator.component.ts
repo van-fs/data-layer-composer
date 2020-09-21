@@ -13,11 +13,22 @@ export class OperatorComponent implements OnInit {
 
   @Input() operator: ComposerOperator;
 
-  @Input() data: any;
+  @Input() data: any = [];
 
   @Input() options: OperatorOptions;
 
+  advanced = false;
+
+  index = 0;
+
   ngOnInit() {
+    console.debug(`<app-operator> ${JSON.stringify(this.data)}`);
+
+    // guard against null or undefined data input
+    if (!this.data) {
+      this.data = [];
+    }
+
     if (this.operator) {
       this.options = this.operator.options;
     }
@@ -25,6 +36,14 @@ export class OperatorComponent implements OnInit {
 
   remove() {
     this.removed.emit(this.operator.options);
+  }
+
+  toggleAdvanced() {
+    this.advanced = !this.advanced;
+  }
+
+  json(): string {
+    return JSON.stringify(this.options);
   }
 
 }

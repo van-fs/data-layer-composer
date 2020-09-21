@@ -39,11 +39,6 @@ export class AppComponent implements OnInit {
       this.logs.push(event);
       this.datalayerTabs.selectedIndex = 2;
     });
-
-    this.observerService.output$.subscribe((data: any[]) => {
-      this.output = JSON.stringify(data, null, 2);
-      this.datalayerTabs.selectedIndex = 1;
-    });
   }
 
   ngOnInit() {

@@ -1,71 +1,52 @@
-<mat-card>
-  <mat-card-header fxLayout="row" fxLayoutAlign="end start">
-    <mat-card-title *ngIf="mode === 'json'">{{ rule.id }}</mat-card-title>
-    <mat-card-subtitle *ngIf="mode === 'json'"> {{ rule.description }}</mat-card-subtitle>
-    <div class="filler"></div>
-    <button *ngIf="mode === 'rule'" button mat-flat-button color="primary" (click)="setMode('rule')">
-      <mat-icon>rule</mat-icon>
-    </button>
-    <button *ngIf="mode === 'json'" button mat-stroked-button color="primary" (click)="setMode('rule')">
-      <mat-icon>rule</mat-icon>
-    </button>
-    <button *ngIf="mode === 'json'" button mat-flat-button color="primary" (click)="setMode('json')">
-      <mat-icon>code</mat-icon>
-    </button>
-    <button *ngIf="mode === 'rule'" button mat-stroked-button color="primary" (click)="setMode('json')">
-      <mat-icon>code</mat-icon>
-    </button>
-  </mat-card-header>
-  <mat-card-content>
-    <div *ngIf="mode === 'rule'" fxLayout="column" fxLayoutAlign="start start">
-      <mat-form-field class="full-width">
-        <mat-label>id</mat-label>
-        <input required matInput [(ngModel)]="rule.id">
-      </mat-form-field>
-      <mat-form-field class="full-width">
-        <mat-label>description</mat-label>
-        <input required matInput [(ngModel)]="rule.description">
-      </mat-form-field>
-      <div class="list" fxLayout="row" fxLayoutAlign="start center">
-        <mat-checkbox matInput [(ngModel)]="rule.readOnLoad">readOnLoad</mat-checkbox>
-        <mat-checkbox matInput [(ngModel)]="rule.monitor">monitor</mat-checkbox>
-        <mat-checkbox matInput [(ngModel)]="rule.debug">debug</mat-checkbox>
-      </div>
-      <app-source class="list full-width" [(source)]="rule.source" (target)="targetChange($event)"></app-source>
-      <div class="list" fxLayout="row" fxLayoutAlign="start center">
-        <div *ngIf="rule.operators.length > 0">Operators</div>
-        <div *ngIf="rule.operators.length === 0">Operators (none)</div>
-        <button mat-icon-button color="primary" [matMenuTriggerFor]="operators" [disabled]="target === null">
-          <mat-icon>add_box</mat-icon>
-        </button>
-      </div>
-      <div class="list" cdkDropList [cdkDropListData]="rule.operators" (cdkDropListDropped)="drop($event)"
-        (removed)="removeOperator($event)">
-        <app-operator *ngFor="let operator of rule.operators" [operator]="operator" [data]="lastOutput"
-          (removed)="removeOperator($event)" cdkDrag>
-        </app-operator>
-      </div>
-      <mat-form-field>
-        <mat-label>destination</mat-label>
-        <mat-select [(ngModel)]="rule.destination">
-          <mat-option [value]="'FS.event'">FS.event</mat-option>
-          <mat-option [value]="'FS.setUserVars'">FS.setUserVars</mat-option>
-          <mat-option [value]="'FS.identify'">FS.identify</mat-option>
-        </mat-select>
-      </mat-form-field>
+<mat-tab-group #ruleTabs>
+  <mat-tab label="Rule">
+    <mat-form-field class="full-width">
+      <mat-label>id</mat-label>
+      <input required matInput [(ngModel)]="rule.id">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>description</mat-label>
+      <input required matInput [(ngModel)]="rule.description">
+    </mat-form-field>
+    <div class="list" fxLayout="row" fxLayoutAlign="start center">
+      <mat-checkbox matInput [(ngModel)]="rule.readOnLoad">readOnLoad</mat-checkbox>
+      <mat-checkbox matInput [(ngModel)]="rule.monitor">monitor</mat-checkbox>
+      <mat-checkbox matInput [(ngModel)]="rule.debug">debug</mat-checkbox>
     </div>
-    <div *ngIf="mode === 'json'">
-      <pre *ngIf="serialized !== ''">{{ serialized }}</pre>
-      <h3 *ngIf="serialized === ''">Test the rule to create JSON</h3>
+    <app-source class="list full-width" [(source)]="rule.source" (target)="targetChange($event)"></app-source>
+    <div class="list" fxLayout="row" fxLayoutAlign="start center">
+      <div *ngIf="rule.operators.length > 0">Operators</div>
+      <div *ngIf="rule.operators.length === 0">Operators (none)</div>
+      <button mat-icon-button color="primary" [matMenuTriggerFor]="operators" [disabled]="target === null">
+        <mat-icon>add_box</mat-icon>
+      </button>
     </div>
-  </mat-card-content>
-
-  <mat-card-actions *ngIf="mode === 'rule'" fxLayout="row" fxLayoutAlign="end center">
-    <button mat-flat-button color="warn" (click)="remove()" [disabled]="!rule.removable">Remove</button>
-    <button mat-flat-button color="primary" (click)="test()" [disabled]="target === null">Test</button>
-  </mat-card-actions>
-</mat-card>
-
+    <div fxLayout="column" fxLayoutAlign="start stretch" class="list" cdkDropList [cdkDropListData]="rule.operators"
+      (cdkDropListDropped)="drop($event)" (removed)="removeOperator($event)">
+      <app-operator *ngFor="let operator of rule.operators;index as i;" [operator]="operator" [data]="stepData[i]"
+        (removed)="removeOperator($event)" cdkDrag>
+      </app-operator>
+    </div>
+    <mat-form-field>
+      <mat-label>destination</mat-label>
+      <mat-select [(ngModel)]="rule.destination">
+        <mat-option [value]="'FS.event'">FS.event</mat-option>
+        <mat-option [value]="'FS.setUserVars'">FS.setUserVars</mat-option>
+        <mat-option [value]="'FS.identify'">FS.identify</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="end center">
+      <button mat-flat-button color="warn" (click)="remove()" [disabled]="!rule.removable">Remove</button>
+      <button mat-flat-button color="primary" (click)="test(true)" [disabled]="target === null">Test</button>
+    </div>
+  </mat-tab>
+  <mat-tab label="Output">
+    <pre>{{ output }}</pre>
+  </mat-tab>
+  <mat-tab label="JSON">
+    <pre *ngIf="serialized !== ''">{{ serialized }}</pre>
+  </mat-tab>
+</mat-tab-group>
 <mat-menu #operators="matMenu">
   <button mat-menu-item *ngFor="let alias of aliases" (click)="addOperator(alias)">
     <span>{{ alias }}</span>

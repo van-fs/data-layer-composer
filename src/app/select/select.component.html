@@ -1,0 +1,42 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <button class="query-button" mat-stroked-button color="primary" [matMenuTriggerFor]="supportedTypes">
+    <mat-icon *ngIf="!queryType">more_horiz</mat-icon>
+    <span *ngIf="queryType">{{ queryType }}</span>
+  </button>
+  <app-source *ngIf="queryType === 'pluck'" [object]="object" (source)="value"></app-source>
+  <app-property-picker *ngIf="queryType === 'pick'" [object]="object" [selection]="properties" [required]="true"
+    [multiple]="true" (selectionChange)="selectionChange($event)" matTooltip="List of properties to pick">
+  </app-property-picker>
+  <app-property-picker *ngIf="queryType === 'has'" [object]="object" [selection]="properties" [required]="true"
+    [multiple]="true" (selectionChange)="selectionChange($event)" matTooltip="List of properties to check">
+  </app-property-picker>
+  <app-property-picker *ngIf="queryType === 'omit'" [object]="object" [selection]="properties" [required]="true"
+    [multiple]="true" (selectionChange)="selectionChange($event)" matTooltip="List of properties to omit">
+  </app-property-picker>
+  <mat-form-field *ngIf="queryType === 'begins' || queryType === 'ends'">
+    <mat-label>value</mat-label>
+    <input matInput required [(ngModel)]="value" matTooltip="Literal value to check" (ngModelChange)="emitSelector()">
+  </mat-form-field>
+  <mat-form-field *ngIf="queryType === 'index'">
+    <mat-label>value</mat-label>
+    <input matInput required type="number" [min]="object.length * -1" [max]="object.length" [(ngModel)]="properties"
+      matTooltip="Index to pluck" (ngModelChange)="emitSelector()">
+  </mat-form-field>
+  <button *ngIf="queryType === 'has'" class="comparison-button" mat-stroked-button color="primary"
+    [matMenuTriggerFor]="comparisons">
+    <mat-icon *ngIf="!comparison.operand">more_horiz</mat-icon>
+    <span *ngIf="comparison.operand">{{ comparison.operand }}</span>
+  </button>
+  <mat-form-field *ngIf="comparison.operand">
+    <mat-label>value</mat-label>
+    <input matInput required matTooltip="Comparison value" [(ngModel)]="comparison.value"
+      (ngModelChange)="emitSelector()">
+  </mat-form-field>
+  <mat-menu #supportedTypes="matMenu">
+    <button mat-menu-item *ngFor="let type of types" (click)="updateQuery(type)"
+      [disabled]="!isValid(type)">{{ type }}</button>
+  </mat-menu>
+  <mat-menu #comparisons="matMenu">
+    <button mat-menu-item *ngFor="let operand of operands" (click)="comparison.operand = operand">{{ operand }}</button>
+  </mat-menu>
+</div>

@@ -11,6 +11,8 @@ import { DataLayerTarget } from '@fullstory/data-layer-observer';
 })
 export class SourceComponent implements OnInit {
 
+  @Input() object: any;
+
   @Input() source = '';
 
   @Output() sourceChange = new EventEmitter<string>();
@@ -28,12 +30,16 @@ export class SourceComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.index((window as any)[this.source], this.source);
+    if (this.object) {
+      this.index(this.object, '');
+    }
 
     if (this.source) {
+      this.index((window as any)[this.source], this.source);
       this.sourceControl.setValue(this.source);
       this.emit(this.source);
     }
+
     this.filteredSources = this.sourceControl.valueChanges.pipe(
       map(value => this.filterSources(value))
     );

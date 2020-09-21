@@ -8,6 +8,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
@@ -35,6 +36,8 @@ import { InsertOptionsComponent } from './operator/insert-options/insert-options
 import { QueryOptionsComponent } from './operator/query-options/query-options.component';
 import { RenameOptionsComponent } from './operator/rename-options/rename-options.component';
 import { SourceComponent } from './source/source.component';
+import { SelectComponent } from './select/select.component';
+import { PropertyPickerComponent } from './property-picker/property-picker.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,8 @@ import { SourceComponent } from './source/source.component';
     QueryOptionsComponent,
     RenameOptionsComponent,
     SourceComponent,
+    SelectComponent,
+    PropertyPickerComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -57,6 +62,7 @@ import { SourceComponent } from './source/source.component';
     FormsModule,
     MatAutocompleteModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
     MatDividerModule,

@@ -1,0 +1,6 @@
+<mat-form-field>
+  <mat-label>properties</mat-label>
+  <mat-select #propertySelect [required]="required" [multiple]="multiple" (selectionChange)="selectProperty($event)">
+    <mat-option *ngFor="let property of properties" [value]="property">{{ property }}</mat-option>
+  </mat-select>
+</mat-form-field>

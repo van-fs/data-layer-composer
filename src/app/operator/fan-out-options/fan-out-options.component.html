@@ -1,7 +1,3 @@
-<mat-form-field>
-  <mat-label>properties</mat-label>
-  <mat-select multiple matTooltip="Desired list of properties to obtain the values and execute the remaining operators"
-    (selectionChange)="selectProperty($event)">
-    <mat-option *ngFor="let property of properties" [value]="property">{{ property }}</mat-option>
-  </mat-select>
-</mat-form-field>
+<app-property-picker [object]="data[index]" [multiple]="true" [(selection)]="options.properties"
+  matTooltip="Desired list of properties to obtain the values and execute the remaining operators">
+</app-property-picker>

@@ -1,21 +1,44 @@
 <div fxLayout="row" fxLayoutAlign="start center" [ngSwitch]="options.name">
-  <button mat-icon-button color="primary" matTooltip="Drag to reorder">
-    <mat-icon class="drag">drag_indicator</mat-icon>
+  <!-- drag indicator and  -->
+  <button class="pad-right" mat-icon-button color="primary" matTooltip="Drag to reorder">
+    <mat-icon>drag_indicator</mat-icon>
   </button>
-  <div class="name-field">{{ options.name }}</div>
   <mat-slide-toggle class="pad-right" color="primary" [(ngModel)]="operator.enabled"></mat-slide-toggle>
+  <!--
+    <button class="pad-right" mat-icon-button color="primary" (click)="toggleAdvanced()">
+      <mat-icon *ngIf="!advanced">unfold_more</mat-icon>
+      <mat-icon *ngIf="advanced">unfold_less</mat-icon>
+    </button>
+    -->
+
+  <!-- operator name and controls -->
+  <button *ngIf="options.name !== 'query' && options.name !== 'insert'" class="operator-button" mat-stroked-button
+    color="primary">
+    {{ options.name }}
+  </button>
+  <div fxFlex>
+    <app-convert-options *ngSwitchCase="'convert'" [options]="options" [data]="data"></app-convert-options>
+    <app-fan-out-options *ngSwitchCase="'fan-out'" [options]="options" [data]="data"></app-fan-out-options>
+    <app-flatten-options *ngSwitchCase="'flatten'" [options]="options" [data]="data"></app-flatten-options>
+    <app-insert-options *ngSwitchCase="'insert'" [options]="options" [data]="data"></app-insert-options>
+    <app-query-options *ngSwitchCase="'query'" [options]="options" [data]="data"></app-query-options>
+    <app-rename-options *ngSwitchCase="'rename'" [options]="options" [data]="data"></app-rename-options>
+  </div>
   <button class="pad-right" mat-icon-button color="primary" (click)="remove()">
     <mat-icon>delete</mat-icon>
   </button>
-  <app-convert-options *ngSwitchCase="'convert'" [options]="options" [data]="data"></app-convert-options>
-  <app-fan-out-options *ngSwitchCase="'fan-out'" [options]="options" [data]="data"></app-fan-out-options>
-  <app-flatten-options *ngSwitchCase="'flatten'" [options]="options"></app-flatten-options>
-  <app-insert-options *ngSwitchCase="'insert'" [options]="options"></app-insert-options>
-  <app-query-options *ngSwitchCase="'query'" [options]="options"></app-query-options>
-  <app-rename-options *ngSwitchCase="'rename'" [options]="options"></app-rename-options>
+  <!--
+  <div *ngIf="advanced" fxFlex="60">
+    <mat-form-field class="full-width">
+      <input matInput [value]="json()">
+    </mat-form-field>
+  </div>
+  -->
+  <!--
   <mat-form-field class="numeric-field">
     <mat-label>index</mat-label>
     <input matInput [(ngModel)]="options.index"
       matTooltip="Position of the object to convert in the operator input list">
   </mat-form-field>
+  -->
 </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { DataLayerRule, DataLayerConfig, DataLayerObserver, LogEvent, LogAppender } from '@fullstory/data-layer-observer';
+import { DataLayerRule, DataLayerConfig, DataLayerObserver, LogEvent, LogAppender, OperatorOptions, DataLayerTarget } from '@fullstory/data-layer-observer';
 import { Subject } from 'rxjs';
-import { ComposerRule } from '../models/composer-rule';
+import { DataLayerService } from './datalayer.service';
 
 class ComposerAppender implements LogAppender {
 
@@ -32,7 +32,7 @@ export class ObserverService {
     previewDestination: (...data: any[]) => {
       this.output$.next(data);
     },
-    previewMode: true,
+    previewMode: false,
     readOnLoad: true,
     rules: [],
     validateRules: true
@@ -44,17 +44,9 @@ export class ObserverService {
     this.observer = new DataLayerObserver(this.config);
   }
 
-  test(rule: ComposerRule, debug?: boolean) {
-    // TODO (van) fix this hack
-    if (rule.handler) {
-      rule.handler.stop();
-    }
-
-    // NOTE the composer doesn't monitor or read on load - it just reads when you click the test button
-    const handler = this.observer.registerTarget(rule.target, rule.operators.filter(o => o.enabled)
-      .map(o => o.options), rule.destination, false, false, debug);
-    rule.handler = handler;
-    rule.handler.fireEvent(rule.target.query());
+  test(target: DataLayerTarget, options: OperatorOptions[], cb: (data: any) => void, debug?: boolean) {
+    const handler = this.observer.registerTarget(target, options, cb, true, false, debug);
+    this.observer.removeHandler(handler);
   }
 
   registerRule(rule: DataLayerRule) {
