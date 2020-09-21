@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { OperatorOptions, DataLayerTarget } from '@fullstory/data-layer-observer';
 import { ObserverService } from '../services/observer.service';
 import { ComposerRule } from '../models/composer-rule';
@@ -13,7 +13,7 @@ import { MatTabGroup } from '@angular/material/tabs';
   templateUrl: './rule.component.html',
   styleUrls: ['./rule.component.scss']
 })
-export class RuleComponent implements OnInit {
+export class RuleComponent implements AfterViewInit {
 
   @ViewChild('ruleTabs', { static: false }) ruleTabs: MatTabGroup;
 
@@ -45,8 +45,11 @@ export class RuleComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-
+  ngAfterViewInit() {
+    // if serialized rule is ready then run a test to populate the steps
+    if (this.rule.operators) {
+      this.test();
+    }
   }
 
   addOperator(name: string) {
