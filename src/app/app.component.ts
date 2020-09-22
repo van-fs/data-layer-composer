@@ -8,6 +8,8 @@ import { DataLayerService } from 'src/app/services/datalayer.service';
 import { ObserverService } from './services/observer.service';
 
 import { appMeasurementProject, cartProject, pageProject, productProject, transactionProject, userProject, gaProject } from './samples';
+import { StorageService } from './services/storage.service';
+import { ComposerProject } from './models/project';
 
 @Component({
   selector: 'app-root',
@@ -29,10 +31,14 @@ export class AppComponent implements OnInit {
 
   variable = 'digitalData';
 
+  projectName = '';
+
   constructor(
     private datalayerService: DataLayerService,
     public observerService: ObserverService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private storageService: StorageService,
+  ) {
 
     this.observerService.log$.subscribe((event: LogEvent) => {
       snackBar.open(event.message, '', { duration: 4000 });
@@ -42,15 +48,20 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    let path = window.location.pathname;
+    const path = window.location.pathname.substring(1); // remove leading /
 
     if (path) {
-      path = path.substring(1); // remove leading /
-      if (path.startsWith('sample')) {
+      this.projectName = path;
+      if (this.projectName.startsWith('sample')) {
         this.loadSample(path);
       } else {
         // get from firebase
+        this.storageService.load(this.projectName).subscribe(project => {
+          this.loadProject(project);
+        })
       }
+    } else {
+      this.newProject();
     }
   }
 
@@ -89,70 +100,67 @@ export class AppComponent implements OnInit {
   }
 
   loadSample(id: string) {
-    this.rules = [];
-    let rules: DataLayerRule[] = [];
-
     switch (id) {
       case 'sample-adobe-app-measurement':
-        this.variable = appMeasurementProject.variable;
-        this.datalayer = this.datalayerService.load(this.variable, appMeasurementProject.datalayer);
-        rules = appMeasurementProject.rules;
+        this.loadProject(appMeasurementProject);
         break;
       case 'sample-ceddl-cart':
-        this.variable = cartProject.variable;
-        this.datalayer = this.datalayerService.load(this.variable, cartProject.datalayer);
-        rules = cartProject.rules;
+        this.loadProject(cartProject);
         break;
       case 'sample-ceddl-page':
-        this.variable = cartProject.variable;
-        this.datalayer = this.datalayerService.load(this.variable, pageProject.datalayer);
-        rules = pageProject.rules;
+        this.loadProject(cartProject);
         break;
       case 'sample-ceddl-product':
-        this.variable = cartProject.variable;
-        this.datalayer = this.datalayerService.load(this.variable, productProject.datalayer);
-        rules = productProject.rules;
+        this.loadProject(cartProject);
         break;
       case 'sample-ceddl-transaction':
-        this.variable = cartProject.variable;
-        this.datalayer = this.datalayerService.load(this.variable, transactionProject.datalayer);
-        rules = transactionProject.rules;
+        this.loadProject(cartProject);
         break;
       case 'sample-ceddl-user':
-        this.variable = cartProject.variable;
-        this.datalayer = this.datalayerService.load(this.variable, userProject.datalayer);
-        rules = userProject.rules;
+        this.loadProject(cartProject);
         break;
       case 'sample-ga':
-        this.variable = gaProject.variable;
-        this.datalayer = this.datalayerService.load(this.variable, gaProject.datalayer);
-        rules = gaProject.rules;
+        this.loadProject(gaProject);
         break;
-      default:
     }
 
-    rules.forEach(rule => {
+    if (id.startsWith('sample')) {
+      this.rules = this.rules.map(rule => {
+        rule.removable = false;
+        return rule;
+      });
+    }
+
+    this.snackBar.open(`Loaded project ${id} into ${this.variable}`, '', { duration: 2000 });
+  }
+
+  loadProject(project: ComposerProject) {
+    this.rules = [];
+
+    this.variable = project.variable;
+    this.datalayer = this.datalayerService.load(this.variable, project.datalayer);
+
+    project.rules.forEach(rule => {
       const composerRule = new ComposerRule(rule.source, rule.destination as string, rule.id, rule.description);
       rule.operators.forEach(operator => {
         composerRule.addOperator(operator);
       });
 
-      if (id.startsWith('sample')) {
-        composerRule.removable = false;
-      }
-
       this.rules.push(composerRule);
     });
 
     this.datalayerTabs.selectedIndex = 0;
-    this.snackBar.open(`Loaded project ${id} into ${this.variable}`, '', { duration: 2000 });
   }
 
   newProject() {
-    location.href = '/';
+    location.href = this.storageService.createId();
   }
 
   save() {
-    this.datalayerService.save();
+    this.storageService.store(this.projectName, {
+      datalayer: this.datalayer,
+      variable: this.variable,
+      rules: this.rules.map(rule => rule.toDataLayerRule()),
+    } as ComposerProject);
   }
 }

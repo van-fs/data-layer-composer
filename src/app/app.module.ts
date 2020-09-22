@@ -38,6 +38,8 @@ import { RenameOptionsComponent } from './operator/rename-options/rename-options
 import { SourceComponent } from './source/source.component';
 import { SelectComponent } from './select/select.component';
 import { PropertyPickerComponent } from './property-picker/property-picker.component';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,7 @@ import { PropertyPickerComponent } from './property-picker/property-picker.compo
     PropertyPickerComponent,
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),
     BrowserAnimationsModule,
     BrowserModule,
     DragDropModule,

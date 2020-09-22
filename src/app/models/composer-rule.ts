@@ -46,15 +46,26 @@ export class ComposerRule {
     this.verified = false;
   }
 
-  toDataLayerRule() {
-    return {
+  toDataLayerRule(): DataLayerRule {
+    const rule = {
       id: this.id,
       source: this.source,
       operators: this.operators.filter(o => o.enabled).map(o => o.options),
       destination: this.destination,
-      readOnLoad: this.readOnLoad,
-      monitor: this.monitor,
-      debug: this.debug
-    };
+    } as DataLayerRule;
+
+    if (this.readOnLoad) {
+      rule.readOnLoad = this.readOnLoad;
+    }
+
+    if (this.monitor) {
+      rule.monitor = this.monitor;
+    }
+
+    if (this.debug) {
+      rule.debug = this.debug;
+    }
+
+    return rule;
   }
 }

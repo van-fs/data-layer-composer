@@ -13,10 +13,8 @@
   <button mat-stroked-button matTooltip="Add a data layer observer rule" (click)="addRule()" [disabled]="!datalayer">
     <mat-icon>add_circle</mat-icon>
   </button>
-  <button mat-stroked-button matTooltip="Clear output and logs" (click)="clear()" [disabled]="!datalayer">
-    <mat-icon>restore_page</mat-icon>
-  </button>
-  <button mat-stroked-button matTooltip="Save data layer and rules to local storage" [disabled]="!datalayer">
+  <button mat-stroked-button matTooltip="Save data layer and rules to local storage"
+    [disabled]="!datalayer || !projectName || projectName.startsWith('sample')" (click)="save()">
     <mat-icon>save</mat-icon>
   </button>
 </mat-toolbar>
@@ -36,7 +34,6 @@
       </mat-list-item>
     </mat-list>
   </mat-drawer>
-
   <div class="sidenav">
     <div fxFlex="40">
       <mat-card>
