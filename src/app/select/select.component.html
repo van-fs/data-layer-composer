@@ -3,7 +3,10 @@
     <mat-icon *ngIf="!queryType">more_horiz</mat-icon>
     <span *ngIf="queryType">{{ queryType }}</span>
   </button>
-  <app-source *ngIf="queryType === 'pluck'" [object]="object" (source)="value"></app-source>
+  <mat-form-field *ngIf="queryType === 'pluck'">
+    <mat-label>select</mat-label>
+    <input matInput required matTooltip="Selector" [(ngModel)]="value" (ngModelChange)="emitSelector()">
+  </mat-form-field>
   <app-property-picker *ngIf="queryType === 'pick'" [object]="object" [selection]="properties" [required]="true"
     [multiple]="true" (selectionChange)="selectionChange($event)" matTooltip="List of properties to pick">
   </app-property-picker>

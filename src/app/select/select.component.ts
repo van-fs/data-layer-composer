@@ -54,7 +54,7 @@ export class SelectComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.debug(`<app-select> ${JSON.stringify(this.object)}`);
+    console.debug(`<app-select> object=${JSON.stringify(this.object)} selector=${this.selector}`);
 
     if (this.selector) {
       const start = this.selector.substring(0, 3);
@@ -73,7 +73,20 @@ export class SelectComponent implements OnInit {
             break;
           case '$[?':
             this.queryType = Query.Has;
+
+            // if there is only one property it is assigned here
             this.properties = params;
+
+            // if a comparison is used need to split (e.g. loginStatus=Logged-in)
+            for (let i = 0; i < this.operands.length; i++) {
+              if (params.indexOf(this.operands[i]) > -1) {
+                const comparison = params.split(this.operands[i]);
+                this.properties = comparison[0];
+                // @ts-ignore
+                this.comparison = new Comparison(this.operands[i], comparison[1]);
+                break;
+              }
+            }
             break;
           case '$[^':
             this.queryType = Query.Begins;
@@ -91,9 +104,11 @@ export class SelectComponent implements OnInit {
 
       if (start.charAt(1) === '.') {
         this.queryType = Query.Pluck;
-        this.value = this.selector.substring(2);
+        this.value = this.selector;
       }
     }
+
+    console.debug(`<app-select> queryType=${this.queryType} properties=${this.properties} value=${this.value} comparison=${JSON.stringify(this.comparison)}`);
   }
 
   updateQuery(query: Query) {
@@ -119,6 +134,9 @@ export class SelectComponent implements OnInit {
 
   emitSelector() {
     switch (this.queryType) {
+      case Query.Pluck:
+        this.selectorChange.emit(this.value as string);
+        break;
       case Query.Pick:
         this.selectorChange.emit(`$[(${this.properties})]`);
         break;
