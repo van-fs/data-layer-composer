@@ -21,8 +21,6 @@ export class AppComponent implements OnInit {
 
   datalayer = '';
 
-  @ViewChild('datalayerTabs', { static: false }) datalayerTabs: MatTabGroup;
-
   logs: LogEvent[] = [];
 
   output: string;
@@ -43,7 +41,6 @@ export class AppComponent implements OnInit {
     this.observerService.log$.subscribe((event: LogEvent) => {
       snackBar.open(event.message, '', { duration: 4000 });
       this.logs.push(event);
-      this.datalayerTabs.selectedIndex = 2;
     });
   }
 
@@ -58,7 +55,7 @@ export class AppComponent implements OnInit {
         // get from firebase
         this.storageService.load(this.projectName).subscribe(project => {
           this.loadProject(project);
-        })
+        });
       }
     } else {
       this.newProject();
@@ -108,16 +105,16 @@ export class AppComponent implements OnInit {
         this.loadProject(cartProject);
         break;
       case 'sample-ceddl-page':
-        this.loadProject(cartProject);
+        this.loadProject(pageProject);
         break;
       case 'sample-ceddl-product':
-        this.loadProject(cartProject);
+        this.loadProject(productProject);
         break;
       case 'sample-ceddl-transaction':
-        this.loadProject(cartProject);
+        this.loadProject(transactionProject);
         break;
       case 'sample-ceddl-user':
-        this.loadProject(cartProject);
+        this.loadProject(userProject);
         break;
       case 'sample-ga':
         this.loadProject(gaProject);
@@ -148,8 +145,6 @@ export class AppComponent implements OnInit {
 
       this.rules.push(composerRule);
     });
-
-    this.datalayerTabs.selectedIndex = 0;
   }
 
   newProject() {
