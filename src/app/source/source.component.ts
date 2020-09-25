@@ -61,19 +61,24 @@ export class SourceComponent implements OnInit {
   }
 
   private index(root: any, path: string) {
-    if (typeof root === 'object' && !Array.isArray(root)) {
-      Object.getOwnPropertyNames(root).forEach(property => {
-        if (typeof root[property] === 'object') {
-          // guard against a list of primitives
-          if (Array.isArray(root[property]) && typeof Array.isArray(root[property][0]) !== 'object') {
-            return;
-          }
+    if (typeof root === 'object') {
+      if (!Array.isArray(root)) {
+        Object.getOwnPropertyNames(root).forEach(property => {
+          if (typeof root[property] === 'object') {
+            console.debug(`indexing ${path} checking ${property}`);
 
-          const propertyPath = Array.isArray(root[property]) ? `${path}[0]` : `${path}.${property}`;
-          this.sources.push(propertyPath);
-          this.index(root[property], propertyPath);
-        }
-      });
+            // guard against a list of primitives
+            if (Array.isArray(root[property]) && typeof root[property][0] !== 'object') {
+              console.debug(`indexing skipped for ${path}.${property}`);
+              return;
+            }
+
+            const propertyPath = Array.isArray(root[property]) ? `${path}.${property}[0]` : `${path}.${property}`;
+            this.sources.push(propertyPath);
+            this.index(root[property], propertyPath);
+          }
+        });
+      }
     }
   }
 
@@ -85,6 +90,7 @@ export class SourceComponent implements OnInit {
       this.sourceChange.emit(source);
       this.target.emit(t);
     } catch (err) {
+      console.error(`Failed to find data layer target ${source}`);
       this.sourceControl.setErrors({ error: true });
       this.target.emit(null);
     }
