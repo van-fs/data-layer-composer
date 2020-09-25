@@ -1,5 +1,4 @@
 import { OperatorOptions, DataLayerTarget, DataLayerRule } from '@fullstory/data-layer-observer';
-import DataHandler from '@fullstory/data-layer-observer/dist/handler';
 import { ComposerOperator } from './composer-operator';
 
 export class ComposerRule {
@@ -49,6 +48,7 @@ export class ComposerRule {
   toDataLayerRule(): DataLayerRule {
     const rule = {
       id: this.id,
+      description: this.description,
       source: this.source,
       operators: this.operators.filter(o => o.enabled).map(o => o.options),
       destination: this.destination,
