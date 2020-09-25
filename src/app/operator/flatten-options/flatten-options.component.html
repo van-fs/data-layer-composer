@@ -1,4 +1,5 @@
 <mat-form-field class="numeric-field">
   <mat-label>maxDepth</mat-label>
-  <input matInput [(ngModel)]="options.maxDepth" matTooltip="Maximum depth to search for properties to be flattened">
+  <input matInput [ngModel]="options.maxDepth" (ngModelChange)="setDepth($event)"
+    matTooltip="Maximum depth to search for properties to be flattened">
 </mat-form-field>

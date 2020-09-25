@@ -12,7 +12,7 @@
 </mat-form-field>
 <mat-form-field class="numeric-field">
   <mat-label>position</mat-label>
-  <input matInput [(ngModel)]="options.position"
+  <input matInput [ngModel]="options.position" (ngModelChange)="setPosition($event)"
     matTooltip="Where to insert in the output list, negative position will insert from the end">
 </mat-form-field>
 <mat-menu #supportedTypes="matMenu">

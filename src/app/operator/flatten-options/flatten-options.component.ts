@@ -9,4 +9,12 @@ import { OperatorComponent } from '../operator.component';
 })
 export class FlattenOptionsComponent extends OperatorComponent {
 
+  setDepth(depth: string | number) {
+    if (typeof depth === 'string') {
+      depth = parseInt(depth);
+    }
+
+    this.options.maxDepth = depth;
+  }
+
 }

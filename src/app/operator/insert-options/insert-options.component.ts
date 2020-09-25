@@ -20,6 +20,14 @@ export class InsertOptionsComponent extends OperatorComponent implements OnInit 
     }
   }
 
+  setPosition(position: string | number) {
+    if (typeof position === 'string') {
+      position = parseInt(position);
+    }
+
+    this.options.position = position;
+  }
+
   setType(type: 'select' | 'value') {
     this.insertType = type;
 
