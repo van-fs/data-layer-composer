@@ -91,6 +91,9 @@
   <button mat-menu-item [matMenuTriggerFor]="google">
     <span>Google</span>
   </button>
+  <button mat-menu-item [matMenuTriggerFor]="tealium">
+    <span>Tealium</span>
+  </button>
 </mat-menu>
 
 <mat-menu #adobe="matMenu">
@@ -107,4 +110,8 @@
 
 <mat-menu #google="matMenu">
   <a mat-menu-item href="sample-ga">Analytics</a>
+</mat-menu>
+
+<mat-menu #tealium="matMenu">
+  <a mat-menu-item href="sample-tealium-retail">Retail</a>
 </mat-menu>

@@ -7,7 +7,10 @@ import { ComposerRule } from './models/composer-rule';
 import { DataLayerService } from 'src/app/services/datalayer.service';
 import { ObserverService } from './services/observer.service';
 
-import { appMeasurementProject, cartProject, pageProject, productProject, transactionProject, userProject, gaProject } from './samples';
+import {
+  appMeasurementProject, cartProject, pageProject, productProject, transactionProject, userProject, gaProject,
+  tealiumRetailProject
+} from './samples';
 import { StorageService } from './services/storage.service';
 import { ComposerProject } from './models/project';
 
@@ -92,7 +95,6 @@ export class AppComponent implements OnInit {
 
   load(datalayer: string) {
     this.datalayer = this.datalayerService.load(this.variable, datalayer);
-    console.log(this.datalayer)
     this.snackBar.open(`Loaded data layer into ${this.variable}`, '', { duration: 2000 });
   }
 
@@ -119,6 +121,9 @@ export class AppComponent implements OnInit {
       case 'sample-ga':
         this.loadProject(gaProject);
         break;
+      case 'sample-tealium-retail':
+        this.loadProject(tealiumRetailProject);
+        break;
     }
 
     if (id.startsWith('sample')) {
@@ -139,6 +144,10 @@ export class AppComponent implements OnInit {
 
     project.rules.forEach(rule => {
       const composerRule = new ComposerRule(rule.source, rule.destination as string, rule.id, rule.description);
+      composerRule.readOnLoad = rule.readOnLoad;
+      composerRule.monitor = rule.monitor;
+      composerRule.debug = rule.debug;
+      composerRule.url = rule.url;
       rule.operators.forEach(operator => {
         composerRule.addOperator(operator);
       });

@@ -5,3 +5,4 @@ export * from './ceddl-product';
 export * from './ceddl-transaction';
 export * from './ceddl-user';
 export * from './google';
+export * from './tealium';
