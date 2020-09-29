@@ -27,6 +27,8 @@ export class ComposerRule {
 
   removable = true;
 
+  url?: string;
+
   constructor(public source = 'digitalData', public destination: string = 'FS.event',
     public id: string = `${Date.now().toString()}`, public description?: string) {
 
@@ -54,16 +56,20 @@ export class ComposerRule {
       destination: this.destination,
     } as DataLayerRule;
 
-    if (this.readOnLoad) {
+    if (this.readOnLoad !== undefined) {
       rule.readOnLoad = this.readOnLoad;
     }
 
-    if (this.monitor) {
+    if (this.monitor !== undefined) {
       rule.monitor = this.monitor;
     }
 
-    if (this.debug) {
+    if (this.debug !== undefined) {
       rule.debug = this.debug;
+    }
+
+    if (this.url !== undefined) {
+      rule.url = this.url;
     }
 
     return rule;

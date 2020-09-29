@@ -13,6 +13,10 @@
       <mat-checkbox matInput [(ngModel)]="rule.monitor">monitor</mat-checkbox>
       <mat-checkbox matInput [(ngModel)]="rule.debug">debug</mat-checkbox>
     </div>
+    <mat-form-field class="full-width">
+      <mat-label>url</mat-label>
+      <input matInput [(ngModel)]="rule.url">
+    </mat-form-field>
     <app-source class="list full-width" [(source)]="rule.source" (target)="targetChange($event)"></app-source>
     <div class="list" fxLayout="row" fxLayoutAlign="start center">
       <div *ngIf="rule.operators.length > 0">Operators</div>
@@ -41,7 +45,10 @@
     </div>
   </mat-tab>
   <mat-tab label="Output">
-    <pre>{{ output }}</pre>
+    <div *ngFor="let o of output">
+      <pre>{{ o }}</pre>
+      <mat-divider></mat-divider>
+    </div>
   </mat-tab>
   <mat-tab label="JSON">
     <pre *ngIf="serialized !== ''">{{ serialized }}</pre>

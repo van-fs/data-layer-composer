@@ -36,7 +36,7 @@ export class RuleComponent implements AfterViewInit {
     'rename',
   ];
 
-  output: string;
+  output: string[] = [];
 
   constructor(
     private snackBar: MatSnackBar,
@@ -46,6 +46,10 @@ export class RuleComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    if (this.rule) {
+      console.debug(`<app-rule> ${this.rule.id}`);
+    }
+
     // if serialized rule is ready then run a test to populate the steps
     if (this.rule.operators) {
       this.test();
@@ -77,6 +81,8 @@ export class RuleComponent implements AfterViewInit {
   }
 
   test(showOutput = false) {
+    this.output = [];
+
     this.stepData[0] = [this.rule.target.query()];
     console.debug(`stepData[0] ${JSON.stringify(this.stepData[0])}`);
 
@@ -90,11 +96,11 @@ export class RuleComponent implements AfterViewInit {
         });
       }
 
-      // NOTE that the rule.operators length is 1 less than the stepData always
-      this.output = JSON.stringify(this.stepData[this.rule.operators.length], null, 2);
-      console.debug(JSON.stringify(this.stepData, null, 2));
-
       if (showOutput) {
+        // NOTE that the rule.operators length is 1 less than the stepData always
+        this.output.push(JSON.stringify(this.stepData[this.rule.operators.length], null, 2));
+        console.debug(JSON.stringify(this.stepData, null, 2));
+
         this.ruleTabs.selectedIndex = 1;
       }
 
