@@ -60,7 +60,8 @@ export class PropertyPickerComponent implements AfterViewInit, OnInit, OnChanges
     if (this.object) {
       // itemize all properties in the object
       Object.getOwnPropertyNames(this.object).forEach(property => {
-        if (typeof this.object[property] !== 'object' && typeof this.object[property] !== 'function') {
+        if (Array.isArray(this.object[property]) ||
+          (typeof this.object[property] !== 'object' && typeof this.object[property] !== 'function')) {
           this.properties.push(property);
         }
       });
