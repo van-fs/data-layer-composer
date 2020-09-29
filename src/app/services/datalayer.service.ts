@@ -15,8 +15,22 @@ export class DataLayerService {
   }
 
   load(variable: string, datalayer?: string | object): string {
-    (window as any)[variable] = typeof datalayer === 'string' ? JSON.parse(datalayer) : datalayer;
-    return JSON.stringify((window as any)[variable], null, 2);
+    let parent: any = window;
+    const path = variable.split('.');
+
+    for (let i = 0; i < path.length; i += 1) {
+      if (!parent[path[i]]) {
+        parent[path[i]] = {};
+      }
+
+      if (i === path.length - 1) {
+        parent[path[i]] = typeof datalayer === 'string' ? JSON.parse(datalayer) : datalayer;
+      }
+
+      parent = parent[path[i]];
+    }
+
+    return JSON.stringify(parent, null, 2);
   }
 
   save() {
