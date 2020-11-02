@@ -21,37 +21,6 @@ export const gaProject: ComposerProject = {
       },
     },
     {
-      event: 'impressions_loaded',
-      ecommerce: {
-        promoView: {
-          promotions: [
-            {
-              id: '1004-Blueberries123321',
-              name: 'Fruits',
-              creative: 'Blueberries123321',
-              position: 'Feature',
-            },
-            {
-              id: '1001-Strawberries222333',
-              name: 'Fruits',
-              creative: 'Strawberries222333',
-              position: 'Sub1',
-            },
-          ],
-        },
-      },
-      'gtm.uniqueEventId': 6,
-    },
-    {
-      event: 'gtm.dom',
-      'gtm.uniqueEventId': 12,
-    },
-    {
-      event: 'Social-media Loaded',
-      'gtm.uniqueEventId': 27,
-    },
-    {
-      event: 'recs loaded',
       ecommerce: {
         impressions: [
           {
@@ -79,6 +48,203 @@ export const gaProject: ComposerProject = {
       'gtm.uniqueEventId': 28,
     },
     {
+      event: 'productClick',
+      ecommerce: {
+        click: {
+          actionField: { action: 'click', list: 'Search Results' },
+          products: [
+            {
+              name: 'Heritage Huckleberries',
+              id: 'P000525722',
+              price: '2.99',
+              brand: 'Heritage',
+              category: 'homepage product recs',
+              variant: '',
+              position: 1,
+            },
+          ],
+        },
+      },
+      eventCallback() {
+        console.log('Callback called');
+      },
+    },
+    {
+      ecommerce: {
+        detail: {
+          actionField: { action: 'detail', list: 'Product Gallery' },
+          products: [
+            {
+              name: 'Heritage Huckleberries',
+              id: 'P000525722',
+              price: '2.99',
+              brand: 'Heritage',
+              category: 'product gallery',
+              variant: '',
+            },
+          ],
+        },
+      },
+    },
+    {
+      event: 'addToCart',
+      ecommerce: {
+        currencyCode: 'USD',
+        add: {
+          actionField: { action: 'add' },
+          products: [
+            {
+              name: 'Heritage Huckleberries',
+              id: 'P000525722',
+              price: '2.99',
+              brand: 'Heritage',
+              category: 'product',
+              variant: '',
+              quantity: 2,
+            },
+          ],
+        },
+      },
+    },
+    {
+      event: 'removeFromCart',
+      ecommerce: {
+        currencyCode: 'USD',
+        remove: {
+          actionField: { action: 'remove' },
+          products: [
+            {
+              name: 'Heritage Huckleberries',
+              id: 'P000525722',
+              price: '2.99',
+              brand: 'Heritage',
+              category: 'product',
+              variant: '',
+              quantity: 1,
+            },
+          ],
+        },
+      },
+    },
+    {
+      ecommerce: {
+        promoView: {
+          promotions: [
+            {
+              id: '1004-Blueberries123321',
+              name: 'Fruits',
+              creative: 'Blueberries123321',
+              position: 'Feature',
+            },
+            {
+              id: '1001-Strawberries222333',
+              name: 'Fruits',
+              creative: 'Strawberries222333',
+              position: 'Sub1',
+            },
+          ],
+        },
+      },
+      'gtm.uniqueEventId': 6,
+    },
+    {
+      event: 'promotionClick',
+      ecommerce: {
+        promoClick: {
+          actionField: { action: 'promo_click' },
+          promotions: [
+            {
+              id: '1004-Blueberries123321',
+              name: 'Fruits',
+              creative: 'Blueberries123321',
+              position: 'Feature',
+            },
+          ],
+        },
+      },
+      eventCallback() {
+        console.log('Callback called');
+      },
+      'gtm.uniqueEventId': 6,
+    },
+    {
+      event: 'checkout',
+      ecommerce: {
+        checkout: {
+          actionField: {
+            action: 'checkout',
+            step: 1,
+            option: 'Visa',
+          },
+          products: [
+            {
+              name: 'Heritage Huckleberries',
+              id: 'P000525722',
+              price: '2.99',
+              brand: 'Heritage',
+              category: 'fruit',
+              variant: '',
+              quantity: 1,
+            },
+          ],
+        },
+      },
+      eventCallback() {
+        console.log('Callback called');
+      },
+    },
+    {
+      ecommerce: {
+        purchase: {
+          actionField: {
+            action: 'purchase',
+            id: 'T12345',
+            affiliation: 'Online Store',
+            revenue: '35.43',
+            tax: '4.90',
+            shipping: '5.99',
+            coupon: '',
+          },
+          products: [
+            {
+              name: 'Heritage Huckleberries',
+              id: 'P000525722',
+              price: '2.99',
+              brand: 'Heritage',
+              category: 'fruit',
+              variant: '',
+              quantity: 1,
+              coupon: '',
+            },
+          ],
+        },
+      },
+    },
+    {
+      ecommerce: {
+        refund: {
+          actionField: {
+            action: 'refund',
+            id: 'T12345',
+          },
+          products: [
+            {
+              id: 'P000525722',
+              quantity: 1,
+            },
+          ],
+        },
+      },
+    },
+    {
+      event: 'gtm.dom',
+      'gtm.uniqueEventId': 12,
+    },
+    {
+      event: 'Social-media Loaded',
+      'gtm.uniqueEventId': 27,
+    },
+    {
       event: 'gtm.load',
       'gtm.uniqueEventId': 42,
     },
@@ -94,35 +260,220 @@ export const gaProject: ComposerProject = {
   ],
   rules: [
     {
-      "id": "fs-ga-page-type",
-      "source": "dataLayer[0]",
+      "id": "fs-ga-pageview",
+      "source": "dataLayer",
       "operators": [
         { "name": "query", "select": "$[?(pageType, pageName)]" },
-        { "name": "insert", "value": "View Page Type" }
+        { "name": "insert", "value": "pageview" }
       ],
       "destination": "FS.event",
       "readOnLoad": true,
       "monitor": true
     },
     {
-      "id": "fs-ga-e-commerce-impressions",
-      "source": "dataLayer[6]",
+      "id": "fs-ga-e-commerce-detail-action",
+      "source": "dataLayer",
       "operators": [
-        { "name": "query", "select": "$.ecommerce.impressions" },
-        { "name": "fan-out" },
-        { "name": "insert", "value": "Commerce impression" }
+        { "name": "query", "select": "$.ecommerce.detail.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "detail" }
       ],
       "destination": "FS.event",
       "readOnLoad": true,
       "monitor": true
     },
     {
-      "id": "fs-ga-e-commerce-promotions",
-      "source": "dataLayer[3]",
+      "id": "fs-ga-e-commerce-detail-product",
+      "source": "dataLayer",
       "operators": [
-        { "name": "query", "select": "$.ecommerce.promoView.promotions" },
+        { "name": "query", "select": "$.ecommerce.detail.products[0]" },
+        { "name": "convert", "properties": "price", "type": "real" },
+        { "name": "convert", "properties": "quantity,position", "type": "int" },
+        { "name": "insert", "value": "detail_product" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-click-action",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.click.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "click" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-click-product",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.click.products[0]" },
+        { "name": "convert", "properties": "price", "type": "real" },
+        { "name": "convert", "properties": "quantity,position", "type": "int" },
+        { "name": "insert", "value": "click_product" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-add-action",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.add.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "add" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-add-product",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.add.products[0]" },
+        { "name": "convert", "properties": "price", "type": "real" },
+        { "name": "convert", "properties": "quantity,position", "type": "int" },
+        { "name": "insert", "value": "add_product" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-remove-action",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.remove.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "remove" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-remove-product",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.remove.products[0]" },
+        { "name": "convert", "properties": "price", "type": "real" },
+        { "name": "convert", "properties": "quantity,position", "type": "int" },
+        { "name": "insert", "value": "remove_product" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-promo_click-action",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.promoClick.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "promo_click" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-promo_click-promotion",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.promoClick.promotions[0]" },
+        { "name": "insert", "value": "promo_click_promotion" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-checkout-action",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.checkout.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "checkout" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-checkout-product",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.checkout.products" },
         { "name": "fan-out" },
-        { "name": "insert", "value": "Commerce promotion" }
+        { "name": "convert", "properties": "price", "type": "real" },
+        { "name": "convert", "properties": "quantity,position", "type": "int" },
+        { "name": "insert", "value": "checkout_product" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-purchase-action",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.purchase.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "purchase" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-purchase-product",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.purchase.products" },
+        { "name": "fan-out" },
+        { "name": "convert", "properties": "price", "type": "real" },
+        { "name": "convert", "properties": "quantity,position", "type": "int" },
+        { "name": "insert", "value": "purchase_product" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-refund-action",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.refund.actionField" },
+        { "name": "convert", "properties": "revenue,tax,shipping", "type": "real" },
+        { "name": "convert", "properties": "step", "type": "int" },
+        { "name": "insert", "value": "refund" }
+      ],
+      "destination": "FS.event",
+      "readOnLoad": true,
+      "monitor": true
+    },
+    {
+      "id": "fs-ga-e-commerce-refund-product",
+      "source": "dataLayer",
+      "operators": [
+        { "name": "query", "select": "$.ecommerce.refund.products" },
+        { "name": "fan-out" },
+        { "name": "convert", "properties": "price", "type": "real" },
+        { "name": "convert", "properties": "quantity,position", "type": "int" },
+        { "name": "insert", "value": "refund_product" }
       ],
       "destination": "FS.event",
       "readOnLoad": true,
@@ -130,10 +481,10 @@ export const gaProject: ComposerProject = {
     },
     {
       "id": "fs-ga-user-vars",
-      "source": "dataLayer[2]",
+      "source": "dataLayer",
       "operators": [
         { "name": "query", "select": "$[?(userProfile)]" },
-        { "name": "flatten" },
+        { "name": "flatten"},
         { "name": "query", "select": "$[?(userId!=-1)]" },
         { "name": "insert", "select": "userId" }
       ],
