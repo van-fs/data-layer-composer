@@ -13,7 +13,7 @@
   <app-property-picker *ngIf="queryType === 'has'" [object]="object" [selection]="properties" [required]="true"
     [multiple]="true" (selectionChange)="selectionChange($event)" matTooltip="List of properties to check">
   </app-property-picker>
-  <app-property-picker *ngIf="queryType === 'omit'" [object]="object" [selection]="properties" [required]="true"
+  <app-property-picker *ngIf="queryType === 'omit'" [object]="object" [selection]="properties" [allowObjects]="true" [required]="true"
     [multiple]="true" (selectionChange)="selectionChange($event)" matTooltip="List of properties to omit">
   </app-property-picker>
   <mat-form-field *ngIf="queryType === 'begins' || queryType === 'ends'">
