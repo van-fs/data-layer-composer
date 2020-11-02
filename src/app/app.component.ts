@@ -1,16 +1,13 @@
-import { Component, ViewChild, OnInit, } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTabGroup } from '@angular/material/tabs';
-import { LogEvent, DataLayerRule } from '@fullstory/data-layer-observer';
+import { LogEvent } from '@fullstory/data-layer-observer';
 
 import { ComposerRule } from './models/composer-rule';
 import { DataLayerService } from 'src/app/services/datalayer.service';
 import { ObserverService } from './services/observer.service';
 
 import {
-  appMeasurementProject, cartProject, pageProject, productProject, transactionProject, userProject, gaProject,
-  tealiumRetailProject
-} from './samples';
+  appMeasurementProject, ceddlProject, gaProject, tealiumRetailProject } from './samples';
 import { StorageService } from './services/storage.service';
 import { ComposerProject } from './models/project';
 
@@ -103,20 +100,8 @@ export class AppComponent implements OnInit {
       case 'sample-adobe-app-measurement':
         this.loadProject(appMeasurementProject);
         break;
-      case 'sample-ceddl-cart':
-        this.loadProject(cartProject);
-        break;
-      case 'sample-ceddl-page':
-        this.loadProject(pageProject);
-        break;
-      case 'sample-ceddl-product':
-        this.loadProject(productProject);
-        break;
-      case 'sample-ceddl-transaction':
-        this.loadProject(transactionProject);
-        break;
-      case 'sample-ceddl-user':
-        this.loadProject(userProject);
+      case 'sample-ceddl':
+        this.loadProject(ceddlProject);
         break;
       case 'sample-ga':
         this.loadProject(gaProject);
@@ -164,7 +149,7 @@ export class AppComponent implements OnInit {
     this.storageService.store(this.projectName, {
       datalayer: this.datalayer,
       variable: this.variable,
-      rules: this.rules.map(rule => rule.toDataLayerRule()),
+      rules: (this.rules.filter(rule => !rule.removed)).map(rule => rule.toDataLayerRule()),
     } as ComposerProject);
   }
 }

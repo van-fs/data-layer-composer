@@ -74,9 +74,11 @@
       </mat-card>
     </div>
     <div fxFlex="60" fxLayout="column" fxLayoutAlign="start stretch">
-      <mat-card *ngFor="let rule of rules">
-        <app-rule [rule]="rule"></app-rule>
-      </mat-card>
+      <div *ngFor="let rule of rules">
+        <mat-card *ngIf="!rule.removed">
+          <app-rule [rule]="rule"></app-rule>
+        </mat-card>
+      </div>
     </div>
   </div>
 </mat-drawer-container>
@@ -85,9 +87,7 @@
   <button mat-menu-item [matMenuTriggerFor]="adobe">
     <span>Adobe</span>
   </button>
-  <button mat-menu-item [matMenuTriggerFor]="ceddl">
-    <span>CEDDL</span>
-  </button>
+  <a mat-menu-item href="sample-ceddl">CEDDL</a>
   <button mat-menu-item [matMenuTriggerFor]="google">
     <span>Google</span>
   </button>
@@ -98,14 +98,6 @@
 
 <mat-menu #adobe="matMenu">
   <a mat-menu-item href="sample-adobe-app-measurement">AppMeasurement</a>
-</mat-menu>
-
-<mat-menu #ceddl="matMenu">
-  <a mat-menu-item href="sample-ceddl-cart">cart</a>
-  <a mat-menu-item href="sample-ceddl-page">page</a>
-  <a mat-menu-item href="sample-ceddl-product">product</a>
-  <a mat-menu-item href="sample-ceddl-transaction">transaction</a>
-  <a mat-menu-item href="sample-ceddl-user">user</a>
 </mat-menu>
 
 <mat-menu #google="matMenu">
