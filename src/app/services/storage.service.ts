@@ -29,6 +29,14 @@ export class StorageService {
   }
 
   async store(id: string, project: ComposerProject) {
+    for (let i = 0; i < project.rules.length; i += 1) {
+      for (const property in project.rules[i]) {
+        if (!project.rules[i][property]) {
+          // firebase does not allow storing undefined values
+          delete project.rules[i][property];
+        }
+      }
+    }
     await this.afs.collection('projects').doc(id).set(project);
     this.snackBar.open(`Saved project ${id}`, '', { duration: 2000 });
   }
