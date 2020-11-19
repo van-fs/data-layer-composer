@@ -76,7 +76,12 @@
     <div fxFlex="60" fxLayout="column" fxLayoutAlign="start stretch">
       <div *ngFor="let rule of rules">
         <mat-card *ngIf="!rule.removed">
-          <app-rule [rule]="rule"></app-rule>
+          <div fxLayout="row" fxLayoutAlign="start start">
+            <app-rule [rule]="rule" fxFlex></app-rule>
+            <button mat-button color="primary" (click)="copyRule(rule)" matTooltip="Clone rule">
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </div>
         </mat-card>
       </div>
     </div>

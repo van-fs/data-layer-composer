@@ -7,9 +7,11 @@ import { DataLayerService } from 'src/app/services/datalayer.service';
 import { ObserverService } from './services/observer.service';
 
 import {
-  appMeasurementProject, ceddlProject, gaProject, tealiumRetailProject } from './samples';
+  appMeasurementProject, ceddlProject, gaProject, tealiumRetailProject
+} from './samples';
 import { StorageService } from './services/storage.service';
 import { ComposerProject } from './models/project';
+import { ComposerOperator } from './models/composer-operator';
 
 @Component({
   selector: 'app-root',
@@ -64,6 +66,12 @@ export class AppComponent implements OnInit {
 
   addRule() {
     this.rules.unshift(new ComposerRule(this.variable));
+  }
+
+  copyRule(rule: ComposerRule) {
+    const copy = new ComposerRule(rule.source, rule.destination);
+    copy.operators = rule.operators.map(operator => new ComposerOperator(operator.options, operator.enabled));
+    this.rules.unshift(copy);
   }
 
   async copySnippet() {
